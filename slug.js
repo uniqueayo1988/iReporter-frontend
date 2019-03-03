@@ -4,13 +4,13 @@ function getURLSlug(words) {
     .toLowerCase();
 }
 
-function getInitials() {
+function getInitials(name) {
   return name.split(' ')
     .map(word => word.charAt(0).toUpperCase())
     .join('');
 }
 
-function getInitials() {
+function getInitials(name) {
   return name.split('')
     .map(word => word.charAt(0).toUpperCase())
     .join(' ');
