@@ -1,7 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = env => ({
   entry: './src/index.js',
@@ -9,37 +9,43 @@ module.exports = env => ({
     filename: 'bundle.js',
     path: path.join(__dirname, 'dist')
   },
-  plugins: [
-    // new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html'
-    })
-  ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css']
+  },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         },
       },
       {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader",
-            options: {minimize: "true"}
+            loader: 'html-loader',
+            options: {minimize: 'true'}
           }
         ]
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.(css|scss)$/,
+        use: ['style-loader', MiniCSSExtractPlugin.loader, 'css-loader', 'sass-loader']
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html'
+    }),
+    new MiniCSSExtractPlugin({
+      filename: 'style.css'
+    })
+  ],
   mode: env.production ? 'production': 'development',
   devtool: env.production ? 'source-map' : 'inline-source-map',
   devServer: {

@@ -1,0 +1,11 @@
+$theme-font: verdana, sans-serif;
+$themeColor-Light: blue;
+$themeColor-Dark: white;
+
+body {
+  font: $theme-font;
+  background-color: $themeColor-Light;
+  h1, h2 {
+      color: $themeColor-Dark
+  }
+}
