@@ -5,6 +5,7 @@ class App extends Component {
     return (
       <div>
         <h1>iReporter App!</h1>
+        <p>This is not production</p>
       </div>
     );
   }
