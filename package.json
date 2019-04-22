@@ -1,12 +1,23 @@
 {
   "name": "ireporter-frontend",
+  "jest": {
+    "moduleNameMapper": {
+      "^image![a-zA-Z0-9$_-]+$": "GlobalImageStub",
+      "^[./a-zA-Z0-9$_-]+\\.(jpg|jpeg|png|gif|svg|css)$": "<rootDir>/src/__test__/RelativeImageStub.js",
+      "module_name_(.*)": "./substituted_module_$1.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "version": "1.0.0",
   "description": "The iReporter is an App that helps to send Intervention and Red-flag reports",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "heroku-postbuild": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest ./src/__test__ --coverage --no-cache -u",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
     "start:dev": "webpack-dev-server --open --config webpack.config.js --env.NODE_ENV=local",
     "build": "webpack --config webpack.config.js --env.production"
   },
@@ -25,11 +36,16 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.1",
+    "coveralls": "^3.0.3",
     "css-loader": "^2.1.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.7.1",
     "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
