@@ -1,0 +1,638 @@
+/*
+**Styling the iReporter App
+*/
+
+*{
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: rgba(0, 0, 255, 0.1);
+  font-family: arial;
+}
+
+/*index.html page - header style*/
+li a,
+.sidenav a,
+button,
+h1,
+.tr-header {
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 17px;
+}
+
+header,
+footer {
+  background: radial-gradient(#000, #00f);
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 60px;
+  border-bottom: rgba(0, 0,0, 0.2) solid 1px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.nav-wrapper {
+  padding-top: 6px;  
+}
+
+.nav-icon {
+  display: none;
+  cursor: pointer;
+}
+
+ul {
+  padding: 0;
+}
+
+.logo a {
+  text-decoration:none;
+  color: red;
+  font-weight: 700;
+  font-size: 38px;
+  letter-spacing: -3px;
+  font-family: monospace;
+}
+
+.logo-i {
+  color: #fff;
+}
+
+.nav-menu li {
+  display: inline-block;
+}
+
+.sidenav a:hover,
+ul li a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.work-menu {
+  margin: 0 20px;
+}
+
+li a {
+  text-decoration:none;
+  color:#fff;
+  font-weight: 700;
+}
+
+.menu-btn {
+  background: #fff;
+  padding: 4px;
+  font-weight: 700;
+  color: #00f;
+  border-radius: 5px
+}
+
+.menu-btn:hover {
+  background: rgb(0, 0, 255);
+  color: #fff;
+}
+
+button,
+input[type=submit],
+.tb-edit,
+.tb-delete,
+.admin-save {
+  cursor: pointer;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 255, 0.8);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.header-content {
+  color: #fff;
+}
+
+.right-content,
+.left-content,
+.img,
+.vdo {
+  width: 50%;
+  float: left;
+  padding: 20px;
+}
+
+.left-content {
+  padding: 100px 30px 0;
+  text-align: right;
+}
+
+.content-para {
+  padding: 40px 0;
+}
+
+.right-content {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20px 0 0 20px;
+  text-align: center;
+}
+
+form {
+  margin: 0 10%;
+}
+
+.userMsg-wrapper {
+  text-align: center;
+  color: #fff;
+}
+
+.userMsg {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.form-info {
+  font-style: italic;
+  color: rgba(255, 0, 0, 0.4);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=submit],
+textarea {
+  width: 100%;
+  outline: none;
+  border-radius: 10px;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+textarea {
+  padding: 12px 20px;
+  margin: 6px 0px;
+}
+
+input[type=submit] {
+  font-size: 18px;
+  padding: 6px;
+  margin-top: 30px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+input[type=submit]:hover,
+.admin-save:hover {
+  color: #fff;
+  background: rgb(0, 0, 255);
+}
+
+.register-link {
+  padding: 30px 0;
+}
+
+.register-here {
+  text-decoration: none;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+
+.register-here:hover {
+  color: #fff;
+}
+
+.clear {
+  clear: both;
+}
+
+/*index.html page - main style*/
+hr {
+  width: 20px;
+  border: 1px solid;
+}
+
+.main-works {
+  text-align: center;
+  padding: 40px 0 80px;
+}
+
+.work-step {
+  width: 33.33%;
+  float: left;
+  padding: 10px;
+}
+
+.work-icon {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 45px;
+}
+
+.work-body p {
+  text-align: left;
+}
+
+.how-card {
+  border: #000 solid 2px;
+  border-radius: 3px;
+  padding: 0 10px;
+  box-shadow: 5px 5px grey;
+}
+
+.card-bg {
+  background: #fff;
+}
+
+.card-bgMid {
+  background: #f1f2fc;
+}
+
+.media {
+  background: #fff;
+  padding: 20px;
+}
+
+img,
+iframe {
+  width: 100%;
+  height: 400px;
+}
+
+footer {
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+}
+
+.footer-para {
+  margin: 0;
+}
+
+
+/*profile.html page style*/
+  #statusBtn,
+  #status,
+  .redflagStatus {
+    border-radius: 5px;
+  }
+
+  .locationBtn {
+    background-color: rgba(255, 255, 255, 0.6);
+    margin-top: 10px;
+    padding: 5px;
+    text-transform: unset;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .db-body {
+    background: #000046;
+  }
+
+  .user-name {
+    color: #fff;
+    background: rgba(255,255,255, 0.2);
+    text-align: center;
+    padding: 40px 0;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .db-sidenav {
+    width: 15%;
+    text-align: right;
+    /*padding-right: 10px;*/
+  }
+
+  .main-div {
+    width: 85%;
+    background: #fff;
+  }
+
+  .db-sidenav,
+  .main-div {
+    float: left;
+  }
+
+  .nav-list {
+    padding: 10px;
+  }
+
+  .nav-list:hover {
+    background: rgba(255,255,255, 0.2);
+    cursor: pointer;
+  }
+
+  .nav-list a {
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .nav-list .fa {
+    margin: 0 5px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .db-header {
+    text-transform: none;
+    text-align: center;
+  }
+
+  .record-header {
+    padding: 10px 0 0 10px;
+  }
+
+  .db-redFlag,
+  .db-intervention {
+    width: 25%;
+    float: left;
+  }
+
+  .redFlag-para,
+  .intervention-para {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .para-nos {
+    font-weight: 700;
+    font-size: 30px;
+  }
+
+  .db-redFlag1,
+  .db-intervention1 {
+    background: #008c00;
+    color: #fff;
+  }
+
+  .db-redFlag2,
+  .db-intervention2 {
+    background: #33336b;
+    color: #fff;
+  }
+
+  .db-redFlag3,
+  .db-intervention3 {
+    background: #000046;
+    color: #fff;
+  }
+
+  .db-redFlag4,
+  .db-intervention4 {
+    background: #e80000;
+    color: #fff;
+  }
+
+  .para-sub {
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .db-table {
+    padding: 40px 10px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .table-header,
+  .td-action,
+  .record-header {
+    text-align: center;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    background: #000046;
+    color: #fff;
+  }
+
+  .tb-btn {
+    color: #000;
+  }
+
+  .tb-fa {
+    margin: 0 5px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.3);
+  }
+
+  td a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .tb-date,
+  .record-name {
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(255,255,255, 0.6);
+  }
+
+  /*draft.html page style*/
+  td .fa-edit,
+  td .fa-trash {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .tb-edit {
+    color: skyblue;
+  }
+
+  .tb-delete {
+    color: #f00;
+  }
+
+  /*all-records.html page style*/
+  td img {
+    width: 100px;
+    height: 150px;
+  }
+
+  /*create.html page style*/
+  input[type=file] {
+    font-size: 18px;
+    width: 100%;
+  }
+
+  /*record.html page style*/
+  .db-content {
+    width: 80%;
+    margin: auto;
+    padding: 20px 0;
+  }
+
+  .record-header {
+    padding: 0;
+  }
+
+  .record-name {
+    color: rgba(0,0,0, 0.5);
+  }
+
+  .db-content p {
+    text-align: justify;
+  }
+
+  .admin-status {
+    padding: 2px;
+  }
+
+  .admin-save {
+
+  }
+
+  /*admin-home.html page style*/
+
+
+/*Media queries*/
+@media (max-width: 600px) {
+  .nav-header {
+    padding: 20px;
+  }
+
+  .logo a {
+    font-size: 34px;
+  }
+
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-weight: 700;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-icon {
+    display: unset;
+    font-size: 25px;
+  }
+
+  .right-content,
+  .left-content,
+  .img,
+  .vdo {
+    width: 100%;
+  }
+
+  .main-works {
+    padding: 20px 0 40px;
+  }
+
+  img,
+  iframe {
+    height: 250px;
+  }
+
+  .left-content {
+    padding: 20px 20px 0;
+    text-align: center;
+  }
+
+  .right-content {
+    border-radius: 20px 0;
+  }
+
+  .work-step {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .db-sidenav {
+    display: none;
+  }
+
+  .main-div {
+    width: 100%;
+  }
+
+  .db-redFlag,
+  .db-intervention {
+    width: 50%;
+    float: left;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+}
+

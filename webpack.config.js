@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = env => ({
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'dist')
@@ -17,22 +17,41 @@ module.exports = env => ({
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        },
+        use: [
+          'babel-loader',
+          {
+            loader: 'eslint-loader',
+            options: {
+              useEslintrc: true
+            }
+          }
+        ]
       },
       {
         test: /\.html$/,
         use: [
           {
             loader: 'html-loader',
-            options: {minimize: 'true'}
+            options: { minimize: true }
           }
         ]
       },
       {
         test: /\.(css|scss)$/,
         use: ['style-loader', MiniCSSExtractPlugin.loader, 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: '[name].[ext]',
+              outputPath: './assets/img/'
+            }
+          }
+        ]
       }
     ]
   },
@@ -46,7 +65,7 @@ module.exports = env => ({
       filename: 'style.css'
     })
   ],
-  mode: env.production ? 'production': 'development',
+  mode: env.production ? 'production' : 'development',
   devtool: env.production ? 'source-map' : 'inline-source-map',
   devServer: {
     historyApiFallback: true
