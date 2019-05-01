@@ -1,13 +1,22 @@
 import React from 'react';
 import image from '../assets/img/fraud.jpg';
-// import Signup from '../components/Signup';
-// import Login from '../components/Login';
-import Header from '../components/Header';
+import Nav from '../components/Nav';
+import Signup from '../components/Signup';
 import Footer from '../components/Footer';
 
-const App = () => (
+const LandingPage = () => (
   <div>
-    <Header />
+    <header>
+      <Nav />
+      <div className="header-content">
+        <div className="left-content">
+          <h1>Report corruption and issues that need government intervention.</h1>
+          <p className="content-para">Let us curb corruption to aid economic development.</p>
+        </div>
+        <Signup />
+        <div className="clear" />
+      </div>
+    </header>
     <main>
       <section className="main-works" id="how">
         <h2>HOW IT WORKS</h2>
@@ -80,4 +89,4 @@ const App = () => (
   </div>
 );
 
-export default App;
+export default LandingPage;

@@ -190,6 +190,14 @@ form {
   font-size: 13px;
 }
 
+#returnMsg {
+  background: indianred;
+  display: inline-block;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.sign-proceed,
 input[type=text],
 input[type=email],
 input[type=password],
@@ -208,6 +216,7 @@ textarea {
   margin: 6px 0px;
 }
 
+.sign-proceed,
 input[type=submit] {
   font-size: 18px;
   padding: 6px;
