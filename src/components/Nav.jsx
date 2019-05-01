@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class Header extends React.Component {
+class Nav extends React.Component {
   openNav = () => {
     const sideNav = document.querySelector('#mySidenav');
     sideNav.style.width = '250px';
@@ -13,6 +14,7 @@ class Header extends React.Component {
   }
 
   render() {
+    const { handleOnClick, toggleLogin } = this.props;
     return (
       <div>
         <nav>
@@ -27,19 +29,17 @@ class Header extends React.Component {
             <div className="nav-wrapper">
               <ul className="nav-menu">
                 <li>
-                  <a href="#home">
+                  <Link to="/">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#how" className="work-menu">
+                  <Link to="/#how" className="work-menu">
                     How it works
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="login.html">
-                    <button type="button" className="menu-btn">Login</button>
-                  </a>
+                  <button type="button" className="menu-btn" onClick={handleOnClick}>{!toggleLogin ? 'Signup' : 'Login'}</button>
                 </li>
               </ul>
 
@@ -50,10 +50,10 @@ class Header extends React.Component {
           </div>
 
           <div id="mySidenav" className="sidenav">
-            <a href="#home" className="closebtn" onClick={this.closeNav}>&times;</a>
-            <a href="#home">Home</a>
-            <a href="#how">How it works</a>
-            <a href="login.html"><button type="button" className="menu-btn">Login</button></a>
+            <Link to="/" className="closebtn" onClick={this.closeNav}>&times;</Link>
+            <Link to="/">Home</Link>
+            <Link to="/#how">How it works</Link>
+            <button type="button" className="menu-btn" onClick={handleOnClick}>{!toggleLogin ? 'Signup' : 'Login'}</button>
           </div>
         </nav>
       </div>
@@ -61,4 +61,9 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+Nav.propTypes = {
+  handleOnClick: PropTypes.func.isRequired,
+  toggleLogin: PropTypes.bool.isRequired
+};
+
+export default Nav;
