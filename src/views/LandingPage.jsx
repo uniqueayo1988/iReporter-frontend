@@ -32,9 +32,9 @@ class LandingPage extends React.Component {
         </header>
         <main>
           <section className="main-works" id="how">
-            <h2>HOW IT WORKS</h2>
-            <hr />
-            <p>Have you sighted an incidence that needs to be reported?</p>
+            <h2 className="works">HOW IT WORKS</h2>
+            <hr className="works" />
+            <p className="works">Have you sighted an incidence that needs to be reported?</p>
             <div className="work-body">
               <div className="work-step">
                 <div className="how-card card-bg">
