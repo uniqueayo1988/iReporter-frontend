@@ -10,7 +10,8 @@ class Login extends React.Component {
     password: '',
     fetching: false,
     loggedIn: false,
-    // isAdmin: false,
+    isAdmin: false,
+    isUser: false,
     message: ''
   }
 
@@ -30,19 +31,32 @@ class Login extends React.Component {
       const response = await ireporterApi.post('/auth/login', {
         email, password,
       });
-      const { status } = response.data;
+      // const { status } = response.data;
       const { token, user } = response.data.data[0];
       const { firstName, lastName } = user;
-      if (status === 200) {
-        const userInfo = {
-          token, firstName, lastName
-        };
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      const userInfo = {
+        token, firstName, lastName
+      };
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+      if (firstName === 'admin') {
+        this.setState({ isAdmin: true });
+      } else {
         this.setState({ loggedIn: true });
       }
-      this.setState({ fetching: false });
+      this.setState({ fetching: false, isUser: true });
     } catch (error) {
       this.setState({ fetching: false, message: error.response.data.message });
+    }
+  }
+
+  redirectLogin() {
+    const { isAdmin, loggedIn } = this.state;
+    if (isAdmin) {
+      return <Redirect to="/admin" />;
+    }
+    if (loggedIn) {
+      return <Redirect to="/profile" />;
     }
   }
 
@@ -59,11 +73,11 @@ class Login extends React.Component {
       password,
       fetching,
       message,
-      loggedIn,
+      isUser,
     } = this.state;
     const { handleOnClick } = this.props;
     return (
-      !loggedIn ? (
+      !isUser ? (
         <div className="right-content">
           <h2 className="form-header">Be an iReporter</h2>
           <form action="" onSubmit={this.handleSubmit}>
@@ -80,9 +94,7 @@ class Login extends React.Component {
             <span className="register-here" onClick={handleOnClick} role="presentation">REGISTER HERE</span>
           </div>
         </div>
-      ) : (
-        <Redirect to="/profile" />
-      )
+      ) : this.redirectLogin()
     );
   }
 }

@@ -9,7 +9,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: rgba(0, 0, 255, 0.1);
+  background: #000046;
   font-family: arial;
 }
 
@@ -42,7 +42,7 @@ footer {
   display: flex;
   justify-content: center;
   flex-direction: column;
-}
+} 
 
 .nav-wrapper {
   padding-top: 6px;  
@@ -359,10 +359,6 @@ footer {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  .db-body {
-    background: #000046;
   }
 
   .user-name {
