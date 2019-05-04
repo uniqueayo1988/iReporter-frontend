@@ -107,8 +107,3 @@ class Signup extends React.Component {
 }
 
 export default Signup;
-// const fetchPosts = () => async (dispatch) => {
-// const response = await ireporterApi.post('/auth/signup');
-
-// const a = response.data;
-// application/json; charset=utf-8

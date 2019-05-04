@@ -9,8 +9,24 @@ configure({ adapter: new Adapter() });
 describe('<Nav />', () => {
   const wrapper = shallow(<Nav />);
 
+  // console.log(wrapper.debug());
+
   it('should render nav', () => {
     expect(wrapper.find('nav').length).toBe(1);
+  });
+
+  it('should render nav', () => {
+    expect(wrapper.find('.closebtn').length).toBe(1);
+    wrapper.find('.closebtn').simulate('click');
+  });
+
+  it('should render nav', () => {
+    expect(wrapper.find('.nav-icon').length).toBe(1);
+    wrapper.find('.nav-icon').simulate('click');
+  });
+
+  it('should render nav', () => {
+    expect(wrapper.find('div').length).toBe(6);
   });
 });
 

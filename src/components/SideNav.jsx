@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
-// import PropTypes from 'prop-types';
-// import { Redirect } from 'react-router';
 
 class SideNav extends React.Component {
   state = {
@@ -28,7 +26,6 @@ class SideNav extends React.Component {
   }
 
   render() {
-    // const { showSignout } = this.props;
     const { logout, firstName, lastName } = this.state;
     return (
       logout ? (
@@ -71,11 +68,5 @@ class SideNav extends React.Component {
     );
   }
 }
-
-// Nav.propTypes = {
-//   handleOnClick: PropTypes.func.isRequired,
-//   toggleLogin: PropTypes.bool.isRequired,
-//   showSignout: PropTypes.bool.isRequired,
-// };
 
 export default SideNav;

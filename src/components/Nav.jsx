@@ -5,17 +5,16 @@ import { Redirect } from 'react-router';
 
 class Nav extends React.Component {
   state = {
-    logout: true
+    logout: true,
+    navWidth: 0
   }
 
   openNav = () => {
-    const sideNav = document.querySelector('#mySidenav');
-    sideNav.style.width = '250px';
+    this.setState({ navWidth: '250px' });
   }
 
   closeNav = () => {
-    const sideNav = document.querySelector('#mySidenav');
-    sideNav.style.width = '0';
+    this.setState({ navWidth: 0 });
   }
 
   handleLogout = () => {
@@ -27,7 +26,9 @@ class Nav extends React.Component {
 
   render() {
     const { handleOnClick, toggleLogin, showSignout } = this.props;
-    const { logout } = this.state;
+    const { logout, navWidth } = this.state;
+    const navWide = { width: navWidth };
+
     return (
       logout ? (
         <div>
@@ -52,6 +53,7 @@ class Nav extends React.Component {
                       <li>
                         <Link to="/#how" className="work-menu">
                           How it works
+                          {navWidth}
                         </Link>
                       </li>
                     </div>
@@ -70,7 +72,7 @@ class Nav extends React.Component {
               </div>
             </div>
 
-            <div id="mySidenav" className="sidenav">
+            <div id="mySidenav" className="sidenav" style={navWide}>
               <span className="closebtn" onClick={this.closeNav} role="presentation">&times;</span>
               {showSignout && (
                 <div>
