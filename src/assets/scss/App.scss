@@ -9,7 +9,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: #000046;
+  background: rgba(0, 0, 255, 0.1);
   font-family: arial;
 }
 
@@ -22,8 +22,21 @@ h1,
   text-transform: uppercase;
 }
 
+.overflow {
+  overflow-x: auto;
+}
+
+.overflowFloat {
+  float: right;
+}
+
 p {
   font-size: 17px;
+}
+
+.btn-user {
+  display: block;
+  margin: 20px auto;
 }
 
 header,
@@ -166,6 +179,10 @@ input[type=submit],
   background: rgba(255, 255, 255, 0.8);
   border-radius: 20px 0 0 20px;
   text-align: center;
+}
+
+.showSignout {
+  display: inline-block;
 }
 
 form {
@@ -322,6 +339,11 @@ footer {
   #status,
   .redflagStatus {
     border-radius: 5px;
+  }
+
+  .main-works,
+  .db-body {
+    background: #000046;
   }
 
   .locationBtn {

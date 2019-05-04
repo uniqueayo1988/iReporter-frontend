@@ -23,7 +23,7 @@ describe('<Signup />', () => {
       }
     ]
   });
-  it('should doen psksl', async () => {
+  it('should submit a form', async () => {
     const wrapper = shallow(<Signup />);
     wrapper.find('#firstname').simulate('change', {
       currentTarget: { value: 'man' }
@@ -54,7 +54,6 @@ describe('<Signup />', () => {
     });
 
     // expect(Login.prototype.handleSubmit).toHaveBeenCalled();
-    // console.log(wrapper.debug());
   });
   it('should test for error', async () => {
     mock.onPost('/auth/signup').reply(500);

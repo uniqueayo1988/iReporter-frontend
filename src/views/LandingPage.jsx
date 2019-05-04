@@ -7,7 +7,8 @@ import Footer from '../components/Footer';
 
 class LandingPage extends React.Component {
   state = {
-    toggleSignUp: true
+    toggleSignUp: true,
+    showSignout: true
   }
 
   handleOnClick = () => {
@@ -16,11 +17,15 @@ class LandingPage extends React.Component {
   }
 
   render() {
-    const { toggleSignUp } = this.state;
+    const { toggleSignUp, showSignout } = this.state;
     return (
       <div>
         <header>
-          <Nav handleOnClick={this.handleOnClick} toggleLogin={toggleSignUp} />
+          <Nav
+            handleOnClick={this.handleOnClick}
+            toggleLogin={toggleSignUp}
+            showSignout={showSignout}
+          />
           <div className="header-content">
             <div className="left-content">
               <h1>Report corruption and issues that need government intervention.</h1>

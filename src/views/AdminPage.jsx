@@ -12,7 +12,8 @@ class AdminPage extends React.Component {
     redflags: [],
     toggle: false,
     toggleRedflag: true,
-    errMessage: ''
+    errMessage: '',
+    showSignout: false
   }
 
   componentDidMount() {
@@ -66,15 +67,15 @@ class AdminPage extends React.Component {
 
   render() {
     const {
-      interventions, redflags, toggle, toggleRedflag, errMessage
+      interventions, redflags, toggle, toggleRedflag, errMessage, showSignout
     } = this.state;
 
     return (
       <div>
         <header>
-          <Nav />
+          <Nav showSignout={showSignout} />
         </header>
-        <main>
+        <main className="db-body">
           <div className="db-sidenav">
             <section>
               <h2 className="user-name">
@@ -103,8 +104,8 @@ class AdminPage extends React.Component {
             <hr />
             <section className="db-table">
               <h2 className="table-header">User Records</h2>
-              <div style={{ overflowX: 'auto' }}>
-                <div style={{ float: 'right' }}>
+              <div className="overflow">
+                <div className="overflowFloat">
                   <button type="button" className="menu-btn tb-btn showRecord" onClick={this.showRedflag}>
                     <i className="fa fa-plus tb-fa" />
                     Red flags
@@ -195,7 +196,6 @@ class AdminPage extends React.Component {
           <div className="clear" />
         </main>
         {errMessage}
-        Hiiiii
         <Footer />
       </div>
     );

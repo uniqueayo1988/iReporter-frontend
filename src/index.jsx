@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import AdminPage from './views/AdminPage';
+import CreatePage from './views/CreatePage';
 
 // Import styles
 import './assets/scss/App.scss';
@@ -19,6 +20,7 @@ const App = () => (
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/profile" component={ProfilePage} />
         <Route exact path="/admin" component={AdminPage} />
+        <Route exact path="/create" component={CreatePage} />
       </Switch>
     </div>
   </BrowserRouter>
