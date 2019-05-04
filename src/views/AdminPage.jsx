@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ireporterApi from '../api/ireporterApi';
-
-// import PropTypes from 'prop-types';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 
@@ -104,8 +102,8 @@ class AdminPage extends React.Component {
             <hr />
             <section className="db-table">
               <h2 className="table-header">User Records</h2>
-              <div className="overflow">
-                <div className="overflowFloat">
+              <div style={{ overflowX: 'auto' }}>
+                <div style={{ float: 'right' }}>
                   <button type="button" className="menu-btn tb-btn showRecord" onClick={this.showRedflag}>
                     <i className="fa fa-plus tb-fa" />
                     Red flags
@@ -114,83 +112,82 @@ class AdminPage extends React.Component {
                     <i className="fa fa-plus tb-fa" />
                     Interventions
                   </button>
-                  <table id="userRedflag">
-                    <tr className="tr-header">
-                      <th>S/N</th>
-                      <th>Record</th>
-                      <th>Location</th>
-                      <th>Type</th>
-                      <th>Status</th>
-                      <th>Update Status</th>
-                    </tr>
-                    { toggle
-                      && interventions.map((item, i) => {
-                        const date = new Date(item.createdon);
-                        const stringDate = date.toDateString();
-                        return (
-                          <tr key={item.id}>
-                            <td>{i + 1}</td>
-                            <td>
-                              <Link to={`/record?id=${item.id}&type=interventions`}>
-                                <h3 className="tr-header">{item.title}</h3>
-                                <p>
-                                  {item.comment}
-                                  <br />
-                                  <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
-                                </p>
-                              </Link>
-                            </td>
-                            <td>{item.location}</td>
-                            <td>{item.type}</td>
-                            <td className="statusUpdate">{item.status}</td>
-                            <td>
-                              <select className="status" name={item.id}>
-                                <option>draft</option>
-                                <option>resolved</option>
-                                <option>under investigation</option>
-                                <option>rejected</option>
-                              </select>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    }
-                    { toggleRedflag
-                      && redflags.map((item, i) => {
-                        const date = new Date(item.createdon);
-                        const stringDate = date.toDateString();
-                        return (
-                          <tr key={item.id}>
-                            <td>{i + 1}</td>
-                            <td>
-                              <Link to={`/record?id=${item.id}&type=redflags`}>
-                                <h3 className="tr-header">{item.title}</h3>
-                                <p>
-                                  {item.comment}
-                                  <br />
-                                  <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
-                                </p>
-                              </Link>
-                            </td>
-                            <td>{item.location}</td>
-                            <td>{item.type}</td>
-                            <td className="statusUpdate">{item.status}</td>
-                            <td>
-                              <select className="status" name={item.id}>
-                                <option>draft</option>
-                                <option>resolved</option>
-                                <option>under investigation</option>
-                                <option>rejected</option>
-                              </select>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    }
-                  </table>
                 </div>
+                <table id="userRedflag">
+                  <tr className="tr-header">
+                    <th>S/N</th>
+                    <th>Record</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                  </tr>
+                  { toggle
+                    && interventions.map((item, i) => {
+                      const date = new Date(item.createdon);
+                      const stringDate = date.toDateString();
+                      return (
+                        <tr key={item.id}>
+                          <td>{i + 1}</td>
+                          <td>
+                            <Link to={`/record?id=${item.id}&type=interventions`}>
+                              <h3 className="tr-header">{item.title}</h3>
+                              <p>
+                                {item.comment}
+                                <br />
+                                <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
+                              </p>
+                            </Link>
+                          </td>
+                          <td>{item.location}</td>
+                          <td>{item.type}</td>
+                          <td className="statusUpdate">{item.status}</td>
+                          <td>
+                            <select className="status" name={item.id}>
+                              <option>draft</option>
+                              <option>resolved</option>
+                              <option>under investigation</option>
+                              <option>rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  }
+                  { toggleRedflag
+                    && redflags.map((item, i) => {
+                      const date = new Date(item.createdon);
+                      const stringDate = date.toDateString();
+                      return (
+                        <tr key={item.id}>
+                          <td>{i + 1}</td>
+                          <td>
+                            <Link to={`/record?id=${item.id}&type=redflags`}>
+                              <h3 className="tr-header">{item.title}</h3>
+                              <p>
+                                {item.comment}
+                                <br />
+                                <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
+                              </p>
+                            </Link>
+                          </td>
+                          <td>{item.location}</td>
+                          <td>{item.type}</td>
+                          <td className="statusUpdate">{item.status}</td>
+                          <td>
+                            <select className="status" name={item.id}>
+                              <option>draft</option>
+                              <option>resolved</option>
+                              <option>under investigation</option>
+                              <option>rejected</option>
+                            </select>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  }
+                </table>
               </div>
-
             </section>
           </div>
           <div className="clear" />
