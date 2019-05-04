@@ -153,7 +153,7 @@ class ProfilePage extends React.Component {
                         <tr key={item.id}>
                           <td><img src={`https://andela-ireporter.herokuapp.com/${item.image}`} alt="Red Flag" /></td>
                           <td>
-                            <Link to={`/record?id=${item.id}&type=redflags`}>
+                            <Link to={`/record?id=${item.id}&type=red-flags`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}

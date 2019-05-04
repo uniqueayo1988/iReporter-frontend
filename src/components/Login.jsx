@@ -31,7 +31,6 @@ class Login extends React.Component {
       const response = await ireporterApi.post('/auth/login', {
         email, password,
       });
-      // const { status } = response.data;
       const { token, user } = response.data.data[0];
       const { firstName, lastName } = user;
       const userInfo = {

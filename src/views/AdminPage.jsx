@@ -162,7 +162,7 @@ class AdminPage extends React.Component {
                         <tr key={item.id}>
                           <td>{i + 1}</td>
                           <td>
-                            <Link to={`/record?id=${item.id}&type=redflags`}>
+                            <Link to={`/record?id=${item.id}&type=red-flags`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}
