@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ireporterApi from '../api/ireporterApi';
 import Nav from '../components/Nav';
-import AdminSideNav from '../components/AdminSideNav';
+import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
+import ireporterApi from '../api/ireporterApi';
 
-class AdminPage extends React.Component {
+/**
+ * @description User draft page
+ */
+class ProfilePage extends React.Component {
   state = {
     interventions: [],
     redflags: [],
@@ -13,7 +16,7 @@ class AdminPage extends React.Component {
     toggleRedflag: true,
     errMessage: '',
     showSignout: false,
-    successMsg: '',
+    successMsg: ''
   }
 
   componentDidMount() {
@@ -25,7 +28,7 @@ class AdminPage extends React.Component {
     try {
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.get('interventions/users', {
+      const response = await ireporterApi.get('interventions', {
         headers: {
           'x-access-token': token,
         }
@@ -40,14 +43,14 @@ class AdminPage extends React.Component {
     try {
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.get('red-flags/users', {
+      const response = await ireporterApi.get('red-flags', {
         headers: {
           'x-access-token': token,
         }
       });
       this.setState({ redflags: response.data.data });
     } catch (error) {
-      this.setState({ errMessage: error.response });
+      this.setState({ errMessage: 'Network error encountered' });
     }
   }
 
@@ -66,16 +69,15 @@ class AdminPage extends React.Component {
   }
 
   deleteRecord = async (e) => {
-    const { value, id, name } = e.target;
-    if (value !== 'Update Status') {
+    const { id, className } = e.currentTarget;
+    if (window.confirm('Click OK to delete this record')) { // eslint-disable-line no-alert
       try {
         const objUser = JSON.parse(localStorage.userInfo);
         const { token } = objUser;
-        const response = await ireporterApi.patch(`${name}/${id}/status`, {
-          status: value
-        },
-        {
-          headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+        const response = await ireporterApi.delete(`${className}/${id}`, {
+          headers: {
+            'x-access-token': token,
+          }
         });
         this.setState({ successMsg: response.data.data[0].message });
         this.componentDidMount();
@@ -92,6 +94,11 @@ class AdminPage extends React.Component {
     }
   }
 
+  /**
+  * @description draft page
+  * @param {object} event - Synthetic React Event
+  * @returns {HTMLDivElement} draft
+  */
   render() {
     const {
       interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
@@ -103,16 +110,24 @@ class AdminPage extends React.Component {
           <Nav showSignout={showSignout} />
         </header>
         <main className="db-body">
-          <AdminSideNav />
+          <SideNav />
+
           <div className="main-div">
-            <h1 className="db-header">ADMIN DASHBOARD</h1>
+            <h1 className="db-header">iREPORTER DASHBOARD</h1>
             <hr />
+
             <section className="db-table">
-              <h2 className="table-header">User Records</h2>
+              <h2 className="table-header">My Drafts</h2>
               <div style={{ textAlign: 'center' }}>
                 {successMsg && this.renderContent()}
               </div>
               <div style={{ overflowX: 'auto' }}>
+                <Link to="/create">
+                  <button type="button" className="menu-btn tb-btn">
+                    <i className="fa fa-plus tb-fa" />
+                    Add Record
+                  </button>
+                </Link>
                 <div style={{ float: 'right' }}>
                   <button type="button" className="menu-btn tb-btn showRecord" onClick={this.showRedflag}>
                     <i className="fa fa-plus tb-fa" />
@@ -123,14 +138,15 @@ class AdminPage extends React.Component {
                     Interventions
                   </button>
                 </div>
-                <table id="userRedflag">
+
+                <table id="profileRedflag">
                   <tr className="tr-header">
                     <th>S/N</th>
                     <th>Record</th>
-                    <th>Location</th>
                     <th>Type</th>
-                    <th>Status</th>
-                    <th>Update Status</th>
+                    <th>Location</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
                   { toggle
                     && interventions.map((item, i) => {
@@ -140,26 +156,32 @@ class AdminPage extends React.Component {
                         <tr key={item.id}>
                           <td>{i + 1}</td>
                           <td>
-                            <Link to={`/admin/record?id=${item.id}&type=interventions`}>
+                            <Link to={`/edit?id=${item.id}&type=interventions`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}
                                 <br />
-                                <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
+                                <span className="tb-date">{stringDate}</span>
                               </p>
                             </Link>
                           </td>
-                          <td>{item.location}</td>
-                          <td>{item.type}</td>
-                          <td className="statusUpdate">{item.status}</td>
+                          <td>{item.type.toUpperCase()}</td>
                           <td>
-                            <select className="status" id={item.id} onChange={this.deleteRecord} name="interventions">
-                              <option>Update Status</option>
-                              <option>draft</option>
-                              <option>resolved</option>
-                              <option>under investigation</option>
-                              <option>rejected</option>
-                            </select>
+                            {item.location}
+                            <br />
+                            <button type="button" className="locationBtn" name={item.id}>
+                              <span className="tb-date">Change</span>
+                            </button>
+                          </td>
+                          <td className="td-action">
+                            <Link to={`/edit?id=${item.id}&type=interventions`}>
+                              <i className="fa fa-edit tb-edit" />
+                            </Link>
+                          </td>
+                          <td className="td-action">
+                            <span className="interventions" id={item.id} onClick={this.deleteRecord} role="presentation">
+                              <i className="fa fa-trash tb-delete" />
+                            </span>
                           </td>
                         </tr>
                       );
@@ -173,28 +195,32 @@ class AdminPage extends React.Component {
                         <tr key={item.id}>
                           <td>{i + 1}</td>
                           <td>
-                            <Link to={`/admin/record?id=${item.id}&type=red-flags`}>
+                            <Link to={`/edit?id=${item.id}&type=red-flags`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}
                                 <br />
-                                <span className="tb-date">{`${stringDate} - Userid: ${item.createdby}`}</span>
+                                <span className="tb-date">{stringDate}</span>
                               </p>
                             </Link>
                           </td>
-                          <td>{item.location}</td>
-                          <td>{item.type}</td>
-                          <td className="statusUpdate">{item.status}</td>
+                          <td>{item.type.toUpperCase()}</td>
                           <td>
-                            <form>
-                              <select className="status" id={item.id} onChange={this.deleteRecord} name="red-flags">
-                                <option>Update Status</option>
-                                <option>draft</option>
-                                <option>resolved</option>
-                                <option>under investigation</option>
-                                <option>rejected</option>
-                              </select>
-                            </form>
+                            {item.location}
+                            <br />
+                            <button type="button" className="locationBtn" name={item.id}>
+                              <span className="tb-date">Change</span>
+                            </button>
+                          </td>
+                          <td className="td-action">
+                            <Link to={`/edit?id=${item.id}&type=red-flags`}>
+                              <i className="fa fa-edit tb-edit" />
+                            </Link>
+                          </td>
+                          <td className="td-action">
+                            <span className="red-flags" id={item.id} onClick={this.deleteRecord} role="presentation">
+                              <i className="fa fa-trash tb-delete" />
+                            </span>
                           </td>
                         </tr>
                       );
@@ -204,6 +230,7 @@ class AdminPage extends React.Component {
               </div>
             </section>
           </div>
+
           <div className="clear" />
         </main>
         {errMessage}
@@ -213,4 +240,4 @@ class AdminPage extends React.Component {
   }
 }
 
-export default AdminPage;
+export default ProfilePage;

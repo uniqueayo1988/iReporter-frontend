@@ -7,6 +7,7 @@ import AdminPage from './views/AdminPage';
 import CreatePage from './views/CreatePage';
 import UserRecordPage from './views/UserRecordPage';
 import AdminRecordPage from './views/AdminRecordPage';
+import DraftPage from './views/DraftPage';
 
 // Import styles
 import './assets/scss/App.scss';
@@ -24,6 +25,7 @@ const App = () => (
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/create" component={CreatePage} />
         <Route exact path="/record" component={UserRecordPage} />
+        <Route exact path="/draft" component={DraftPage} />
         <Route exact path="/admin/record" component={AdminRecordPage} />
       </Switch>
     </div>

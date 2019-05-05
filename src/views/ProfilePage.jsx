@@ -28,14 +28,14 @@ class ProfilePage extends React.Component {
     try {
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.get('interventions/users', {
+      const response = await ireporterApi.get('interventions', {
         headers: {
           'x-access-token': token,
         }
       });
       this.setState({ interventions: response.data.data });
     } catch (error) {
-      this.setState({ errMessage: error.response });
+      this.setState({ errMessage: 'Network error encountered' });
     }
   }
 
@@ -43,14 +43,14 @@ class ProfilePage extends React.Component {
     try {
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.get('red-flags/users', {
+      const response = await ireporterApi.get('red-flags', {
         headers: {
           'x-access-token': token,
         }
       });
       this.setState({ redflags: response.data.data });
     } catch (error) {
-      this.setState({ errMessage: error.response });
+      this.setState({ errMessage: 'Network error encountered' });
     }
   }
 
