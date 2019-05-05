@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ireporterApi from '../api/ireporterApi';
 import Nav from '../components/Nav';
+import AdminSideNav from '../components/AdminSideNav';
 import Footer from '../components/Footer';
 
 class AdminPage extends React.Component {
@@ -11,7 +12,8 @@ class AdminPage extends React.Component {
     toggle: false,
     toggleRedflag: true,
     errMessage: '',
-    showSignout: false
+    showSignout: false,
+    successMsg: '',
   }
 
   componentDidMount() {
@@ -63,9 +65,36 @@ class AdminPage extends React.Component {
     });
   }
 
+  deleteRecord = async (e) => {
+    const { value, id, name } = e.target;
+    if (value !== 'Update Status') {
+      try {
+        const objUser = JSON.parse(localStorage.userInfo);
+        const { token } = objUser;
+        const response = await ireporterApi.patch(`${name}/${id}/status`, {
+          status: value
+        },
+        {
+          headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+        });
+        this.setState({ successMsg: response.data.data[0].message });
+        this.componentDidMount();
+      } catch (error) {
+        this.setState({ errMessage: error.response });
+      }
+    }
+  }
+
+  renderContent() {
+    const { successMsg } = this.state;
+    if (successMsg) {
+      return <div id="successMsg">{successMsg}</div>;
+    }
+  }
+
   render() {
     const {
-      interventions, redflags, toggle, toggleRedflag, errMessage, showSignout
+      interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
     } = this.state;
 
     return (
@@ -74,34 +103,15 @@ class AdminPage extends React.Component {
           <Nav showSignout={showSignout} />
         </header>
         <main className="db-body">
-          <div className="db-sidenav">
-            <section>
-              <h2 className="user-name">
-                <i className="fa fa-user-circle" />
-                <br />
-                Admin
-              </h2>
-              <ul>
-                <li className="nav-list">
-                  <Link to="/">
-                    <i className="fa fa-home" />
-                    Home
-                  </Link>
-                </li>
-                <li className="nav-list logout">
-                  <Link to="/">
-                    <i className="fa fa-sign-out" />
-                    Logout
-                  </Link>
-                </li>
-              </ul>
-            </section>
-          </div>
+          <AdminSideNav />
           <div className="main-div">
             <h1 className="db-header">ADMIN DASHBOARD</h1>
             <hr />
             <section className="db-table">
               <h2 className="table-header">User Records</h2>
+              <div style={{ textAlign: 'center' }}>
+                {successMsg && this.renderContent()}
+              </div>
               <div style={{ overflowX: 'auto' }}>
                 <div style={{ float: 'right' }}>
                   <button type="button" className="menu-btn tb-btn showRecord" onClick={this.showRedflag}>
@@ -130,7 +140,7 @@ class AdminPage extends React.Component {
                         <tr key={item.id}>
                           <td>{i + 1}</td>
                           <td>
-                            <Link to={`/record?id=${item.id}&type=interventions`}>
+                            <Link to={`/admin/record?id=${item.id}&type=interventions`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}
@@ -143,7 +153,8 @@ class AdminPage extends React.Component {
                           <td>{item.type}</td>
                           <td className="statusUpdate">{item.status}</td>
                           <td>
-                            <select className="status" name={item.id}>
+                            <select className="status" id={item.id} onChange={this.deleteRecord} name="interventions">
+                              <option>Update Status</option>
                               <option>draft</option>
                               <option>resolved</option>
                               <option>under investigation</option>
@@ -162,7 +173,7 @@ class AdminPage extends React.Component {
                         <tr key={item.id}>
                           <td>{i + 1}</td>
                           <td>
-                            <Link to={`/record?id=${item.id}&type=red-flags`}>
+                            <Link to={`/admin/record?id=${item.id}&type=red-flags`}>
                               <h3 className="tr-header">{item.title}</h3>
                               <p>
                                 {item.comment}
@@ -175,12 +186,15 @@ class AdminPage extends React.Component {
                           <td>{item.type}</td>
                           <td className="statusUpdate">{item.status}</td>
                           <td>
-                            <select className="status" name={item.id}>
-                              <option>draft</option>
-                              <option>resolved</option>
-                              <option>under investigation</option>
-                              <option>rejected</option>
-                            </select>
+                            <form>
+                              <select className="status" id={item.id} onChange={this.deleteRecord} name="red-flags">
+                                <option>Update Status</option>
+                                <option>draft</option>
+                                <option>resolved</option>
+                                <option>under investigation</option>
+                                <option>rejected</option>
+                              </select>
+                            </form>
                           </td>
                         </tr>
                       );

@@ -5,7 +5,8 @@ import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import AdminPage from './views/AdminPage';
 import CreatePage from './views/CreatePage';
-import RecordPage from './views/RecordPage';
+import UserRecordPage from './views/UserRecordPage';
+import AdminRecordPage from './views/AdminRecordPage';
 
 // Import styles
 import './assets/scss/App.scss';
@@ -22,7 +23,8 @@ const App = () => (
         <Route exact path="/profile" component={ProfilePage} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/create" component={CreatePage} />
-        <Route exact path="/record" component={RecordPage} />
+        <Route exact path="/record" component={UserRecordPage} />
+        <Route exact path="/admin/record" component={AdminRecordPage} />
       </Switch>
     </div>
   </BrowserRouter>

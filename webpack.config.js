@@ -7,7 +7,7 @@ module.exports = env => ({
   entry: './src/index.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'dist')
+    path: path.join(__dirname, 'dist/')
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
