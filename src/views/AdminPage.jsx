@@ -98,8 +98,7 @@ class AdminPage extends React.Component {
       interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
     } = this.state;
 
-    const isLoggedIn = localStorage.userInfo;
-    return !isLoggedIn ? <Redirect to="/" /> : (
+    return (
       <div>
         <header>
           <Nav showSignout={showSignout} />

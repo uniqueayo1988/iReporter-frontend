@@ -61,11 +61,6 @@ describe('<Admin />', () => {
     expect(wrapper.find('td').length).toBe(0);
   });
 
-  // token =
-  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-  // eyJ1c2VySWQiOjMzLCJpYXQiOjE1NTY5NDg0NTgsImV
-  // 4cCI6MTU1NzAzNDg1OH0.teUVCB6qtP1Rec4Vpkz1jM2ZJZYVTHnBZL4FWbn_TEo';
-
   it('should render app', () => {
     console.log(wrapper.debug());
     expect(wrapper.find('table').length).toBe(1);
