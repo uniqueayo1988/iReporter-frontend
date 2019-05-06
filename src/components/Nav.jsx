@@ -51,10 +51,9 @@ class Nav extends React.Component {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/#how" className="work-menu">
+                        <a href="#how" className="work-menu">
                           How it works
-                          {navWidth}
-                        </Link>
+                        </a>
                       </li>
                     </div>
                   )}

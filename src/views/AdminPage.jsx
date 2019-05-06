@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import ireporterApi from '../api/ireporterApi';
 import Nav from '../components/Nav';
 import AdminSideNav from '../components/AdminSideNav';
@@ -97,7 +98,8 @@ class AdminPage extends React.Component {
       interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
     } = this.state;
 
-    return (
+    const isLoggedIn = localStorage.userInfo;
+    return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
           <Nav showSignout={showSignout} />

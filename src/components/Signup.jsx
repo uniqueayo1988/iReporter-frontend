@@ -89,7 +89,7 @@ class Signup extends React.Component {
             <label htmlFor="firstname" className="form-info">*Your information will be treated with utmost confidentiality!</label>
             <Input type="text" placeholder="FIRST NAME" id="firstname" onChange={this.handleChange('firstname')} value={firstname} />
             <Input type="text" placeholder="LAST NAME" id="lastname" onChange={this.handleChange('lastname')} value={lastname} />
-            <Input type="text" placeholder="OTHER NAMES" id="othernames" onChange={this.handleChange('othernames')} value={othernames} />
+            <Input type="text" placeholder="OTHER NAMES" id="othernames" onChange={this.handleChange('othernames')} value={othernames} required={false} />
             <Input type="email" placeholder="EMAIL" id="email" onChange={this.handleChange('email')} value={email} />
             <Input type="text" placeholder="TELEPHONE" id="phoneNumber" onChange={this.handleChange('phoneNumber')} value={phoneNumber} />
             <Input type="text" placeholder="USERNAME" id="username" onChange={this.handleChange('username')} value={username} />

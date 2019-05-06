@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 import { get } from 'axios';
 import Nav from '../components/Nav';
 import SideNav from '../components/SideNav';
@@ -14,12 +15,13 @@ class CreatePage extends React.Component {
     type: 'redFlag',
     image: '',
     errorMsg: '',
-    disabled: true
+    disabled: true,
+    subDisabled: false,
+    fetching: false
   }
 
   handleChange = str => (e) => {
     this.setState({ [str]: e.currentTarget.value });
-    console.log(this.state);
   }
 
   getLocation = () => {
@@ -47,6 +49,7 @@ class CreatePage extends React.Component {
   }
 
   handleSubmit = async (e) => {
+    this.setState({ subDisabled: true, fetching: true });
     e.preventDefault();
     const {
       title, comment, location, type, image
@@ -57,21 +60,52 @@ class CreatePage extends React.Component {
     formData.append('location', location);
     formData.append('type', type);
     formData.append('image', image);
+
     try {
+      let url;
+      if (type === 'redFlag') {
+        url = 'red-flags';
+      }
+      if (type === 'intervention') {
+        url = 'interventions';
+      }
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.post('/red-flags', {
-        data: formData
-      },
-      {
-        headers: {
-          'x-access-token': token,
-          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        },
+      const response = await ireporterApi.post(`/${url}`,
+        formData,
+        {
+          headers: {
+            'x-access-token': token,
+          },
+        });
+      this.setState({
+        subDisabled: false,
+        fetching: false,
+        disabled: false,
+        successMsg: response.data.data[0].message
       });
-      this.setState({ errorMsg: response.data.data[0].message });
     } catch (error) {
-      this.setState({ errorMsg: error.response.data.message });
+      this.setState({
+        subDisabled: false,
+        fetching: false,
+        disabled: false,
+        errorMsg: error.response.data.message
+      });
+    }
+  }
+
+  handleFile = (e) => {
+    const file = e.target.files[0];
+    this.setState({ image: file });
+  }
+
+  renderContent() {
+    const { successMsg, errorMsg } = this.state;
+    if (successMsg) {
+      return <div id="successMsg">{successMsg}</div>;
+    }
+    if (errorMsg) {
+      return <div id="returnMsg">{errorMsg}</div>;
     }
   }
 
@@ -82,11 +116,13 @@ class CreatePage extends React.Component {
       comment,
       location,
       type,
-      image,
-      // disabled,
-      // errorMsg
+      disabled,
+      subDisabled,
+      fetching
     } = this.state;
-    return (
+
+    const isLoggedIn = localStorage.userInfo;
+    return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
           <Nav showSignout={showSignout} />
@@ -110,7 +146,7 @@ class CreatePage extends React.Component {
                 Intervention Record
                 <br />
                 <br />
-                <input type="text" placeholder="GEOLOCATION" id="geo-data" name="location" value={location} className="location" onChange={this.handleChange('location')} required />
+                <input type="text" placeholder="GEOLOCATION" id="geo-data" name="location" value={location} className="location" onChange={this.handleChange('location')} required disabled={disabled} />
                 <button type="button" id="geo-btn" onClick={this.getLocation}>Get Geolocation</button>
                 <br />
                 <br />
@@ -118,9 +154,11 @@ class CreatePage extends React.Component {
 
                 <label htmlFor="image">Select an image: </label>
                 <br />
-                <input type="file" name="image" id="image" onChange={this.handleChange('image')} accept="image/*" value={image} />
-                <div className="userMsg-wrapper" />
-                <input type="submit" value="SUBMIT" id="recordBtn" />
+                <input type="file" name="image" id="image" onChange={this.handleFile} required />
+                <div className="userMsg-wrapper">
+                  {this.renderContent()}
+                </div>
+                <input type="submit" value={!fetching ? 'SUBMIT' : 'LOADING...'} id="recordBtn" disabled={subDisabled} />
               </form>
             </section>
           </div>

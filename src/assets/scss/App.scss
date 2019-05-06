@@ -29,7 +29,7 @@ p {
 
 header,
 footer {
-  background: radial-gradient(#000, #00f);
+  background: rgba(0, 0, 255, 0.7)
 }
 
 .nav-header {
@@ -175,10 +175,6 @@ input[type=submit],
 
 form {
   margin: 0 10%;
-}
-
-.works {
-  color: white;
 }
 
 .userMsg-wrapper {
@@ -338,7 +334,6 @@ footer {
     border-radius: 5px;
   }
 
-  .main-works,
   .db-body {
     background: #000046;
   }

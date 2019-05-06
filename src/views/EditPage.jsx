@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 import Nav from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
@@ -15,10 +16,6 @@ class EditPage extends React.Component {
     errorMsg: '',
     disabled: true,
     successMsg: ''
-  }
-
-  componentDidMount() {
-    this.fetchRecord();
   }
 
   fetchRecord = async () => {
@@ -99,7 +96,8 @@ class EditPage extends React.Component {
       comment,
       disabled
     } = this.state;
-    return (
+    const isLoggedIn = localStorage.userInfo;
+    return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
           <Nav showSignout={showSignout} />

@@ -10,7 +10,46 @@ configure({ adapter: new Adapter() });
 const mock = new MockAdapter(ireporterApi);
 
 describe('<Admin />', () => {
-  const wrapper = shallow(<AdminPage />);
+  let wrapper;
+  beforeEach(() => {
+    mock.onGet('interventions/users').reply(200, {
+      status: 200,
+      data: [
+        {
+          id: 10,
+          createdon: '2019-02-01T14:07:13.965Z',
+          createdby: 30,
+          type: 'intervention',
+          location: '3MJG+Q4 Chini, Nigeria',
+          status: 'draft',
+          image: 'upload/incident.jpg',
+          title: '',
+          comment: 'Please intervene in what seems a lingering issue in ibeju lekki area of lagos state concerning the stealing of the state funds.\r\nThank you.'
+        },
+      ]
+    });
+
+    mock.onGet('red-flags/users').reply(200, {
+      status: 200,
+      data: [
+        {
+          id: 2,
+          createdon: '2018-12-14T08:45:23.206Z',
+          createdby: 5,
+          type: 'redFlag',
+          location: 'ikeja',
+          status: 'resolved',
+          image: 'ayo.jpg',
+          title: 'red flag',
+          comment: 'an incident in ikeja'
+        },
+      ]
+    });
+    jest.spyOn(JSON, 'parse').mockReturnValue({ token: 'sss' });
+    wrapper = shallow(<AdminPage />);
+  });
+
+  afterEach(jest.restoreAllMocks);
 
   it('should render nav', () => {
     wrapper.find('.showRecord').simulate('click');
@@ -27,26 +66,9 @@ describe('<Admin />', () => {
   // eyJ1c2VySWQiOjMzLCJpYXQiOjE1NTY5NDg0NTgsImV
   // 4cCI6MTU1NzAzNDg1OH0.teUVCB6qtP1Rec4Vpkz1jM2ZJZYVTHnBZL4FWbn_TEo';
 
-
-  mock.onGet('/interventions/users', {
-    // headers: {
-    //   'x-access-token': token
-    // }
-  }).reply(200, {
-    status: 200,
-    data: [
-      {
-        user: {
-          firstName: 'man',
-          lastName: 'man',
-          Email: 'a@a.com',
-          Username: 'man'
-        }
-      }
-    ]
-  });
-
   it('should render app', () => {
+    console.log(wrapper.debug());
     expect(wrapper.find('table').length).toBe(1);
+    // console.log(wrapper.debug());
   });
 });

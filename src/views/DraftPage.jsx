@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import Nav from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
@@ -103,7 +104,9 @@ class ProfilePage extends React.Component {
     const {
       interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
     } = this.state;
-    return (
+
+    const isLoggedIn = localStorage.userInfo;
+    return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
           <Nav showSignout={showSignout} />
