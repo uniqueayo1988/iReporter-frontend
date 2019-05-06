@@ -13,14 +13,17 @@ class CreatePage extends React.Component {
     location: '',
     type: 'redFlag',
     image: '',
-    errorMsg: ''
+    errorMsg: '',
+    disabled: true
   }
 
   handleChange = str => (e) => {
     this.setState({ [str]: e.currentTarget.value });
+    console.log(this.state);
   }
 
   getLocation = () => {
+    this.setState({ disabled: false });
     window.navigator.geolocation.getCurrentPosition(
       async (position) => {
         const lat = position.coords.latitude;
@@ -35,7 +38,7 @@ class CreatePage extends React.Component {
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             }
           });
-          this.setState({ location: response.data.plus_code.compound_code });
+          this.setState({ disabled: true, location: response.data.plus_code.compound_code });
         } catch (error) {
           this.setState({ errorMsg: error.response });
         }
@@ -45,15 +48,26 @@ class CreatePage extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(document.querySelector('#recordForm'));
+    const {
+      title, comment, location, type, image
+    } = this.state;
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('comment', comment);
+    formData.append('location', location);
+    formData.append('type', type);
+    formData.append('image', image);
     try {
       const objUser = JSON.parse(localStorage.userInfo);
       const { token } = objUser;
-      const response = await ireporterApi.post('/interventions', {
+      const response = await ireporterApi.post('/red-flags', {
+        data: formData
+      },
+      {
         headers: {
-          'x-access-token': token
+          'x-access-token': token,
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         },
-        body: formData
       });
       this.setState({ errorMsg: response.data.data[0].message });
     } catch (error) {
@@ -69,7 +83,8 @@ class CreatePage extends React.Component {
       location,
       type,
       image,
-      errorMsg
+      // disabled,
+      // errorMsg
     } = this.state;
     return (
       <div>
@@ -83,7 +98,7 @@ class CreatePage extends React.Component {
             <hr />
             <section className="db-table">
               <h2 className="table-header">Create Record</h2>
-              <form action="" id="recordForm" name="recordForm">
+              <form action="" id="recordForm" name="recordForm" onSubmit={this.handleSubmit}>
                 <label htmlFor="title" className="form-info">*CREATE A RED FLAG OR INTERVENTION RECORD</label>
                 <input type="text" placeholder="TITLE OF RECORD" id="title" name="title" onChange={this.handleChange('title')} value={title} />
                 <textarea placeholder="WRITE A RECORD..." rows="10" id="comment" name="comment" onChange={this.handleChange('comment')} value={comment} />
@@ -95,19 +110,17 @@ class CreatePage extends React.Component {
                 Intervention Record
                 <br />
                 <br />
-                <input type="text" placeholder="GEOLOCATION" id="geo-data" name="location" className="location" onChange={this.handleChange('location')} value={location} required />
-                <button type="button" id="geo-btn" name="title" onClick={this.getLocation}>Get Geolocation</button>
+                <input type="text" placeholder="GEOLOCATION" id="geo-data" name="location" value={location} className="location" onChange={this.handleChange('location')} required />
+                <button type="button" id="geo-btn" onClick={this.getLocation}>Get Geolocation</button>
                 <br />
                 <br />
                 <br />
 
                 <label htmlFor="image">Select an image: </label>
                 <br />
-                <input type="file" name="image" id="image" onChange={this.handleChange('image')} value={image} />
-                <div className="userMsg-wrapper">
-                  <div id="returnMsg">{errorMsg}</div>
-                </div>
-                <input type="submit" value="SUBMIT" id="recordBtn" onClick={this.handleSubmit} />
+                <input type="file" name="image" id="image" onChange={this.handleChange('image')} accept="image/*" value={image} />
+                <div className="userMsg-wrapper" />
+                <input type="submit" value="SUBMIT" id="recordBtn" />
               </form>
             </section>
           </div>

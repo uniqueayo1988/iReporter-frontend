@@ -103,7 +103,6 @@ class ProfilePage extends React.Component {
     const {
       interventions, redflags, toggle, toggleRedflag, errMessage, showSignout, successMsg
     } = this.state;
-
     return (
       <div>
         <header>

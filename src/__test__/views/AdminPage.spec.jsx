@@ -12,6 +12,16 @@ const mock = new MockAdapter(ireporterApi);
 describe('<Admin />', () => {
   const wrapper = shallow(<AdminPage />);
 
+  it('should render nav', () => {
+    wrapper.find('.showRecord').simulate('click');
+    expect(wrapper.find('td').length).toBe(0);
+  });
+
+  it('should render nav', () => {
+    wrapper.find('.showInt').simulate('click');
+    expect(wrapper.find('td').length).toBe(0);
+  });
+
   // token =
   // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
   // eyJ1c2VySWQiOjMzLCJpYXQiOjE1NTY5NDg0NTgsImV
