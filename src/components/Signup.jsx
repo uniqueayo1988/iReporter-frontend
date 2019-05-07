@@ -1,8 +1,17 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import {
+  shape, string, object, func
+} from 'prop-types';
 import Input from './Input';
-import ireporterApi from '../api/ireporterApi';
+import { userSignupAction } from '../actions/userActions';
 
+/**
+ * @description class for user signup
+ * @param {e} for events actions
+ * @returns {undefined}
+ */
 class Signup extends React.Component {
   state = {
     firstname: '',
@@ -13,9 +22,6 @@ class Signup extends React.Component {
     username: '',
     password: '',
     confirmPassword: '',
-    fetching: false,
-    loggedIn: false,
-    message: ''
   }
 
   handleChange = str => (e) => {
@@ -24,7 +30,6 @@ class Signup extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ fetching: true, message: '' });
     const {
       firstname,
       lastname,
@@ -35,38 +40,24 @@ class Signup extends React.Component {
       password,
       confirmPassword,
     } = this.state;
-
-    if (password === confirmPassword) {
-      try {
-        const response = await ireporterApi.post('/auth/signup', {
-          firstname, lastname, othernames, email, phoneNumber, username, password,
-        });
-        const { status } = response.data;
-        const { token, user } = response.data.data[0];
-        const { firstName, lastName } = user;
-        if (status === 201) {
-          const userInfo = {
-            token, firstName, lastName
-          };
-          localStorage.setItem('userInfo', JSON.stringify(userInfo));
-          this.setState({ loggedIn: true });
-        }
-        this.setState({ fetching: false });
-      } catch (error) {
-        this.setState({ fetching: false, message: error.response.data.message });
-      }
-    } else {
-      this.setState({ fetching: false, message: 'You have entered wrong passwords' });
-    }
+    const { userSignup } = this.props;
+    userSignup(
+      firstname, lastname, othernames, email, phoneNumber, username, password, confirmPassword
+    );
   }
 
   renderContent() {
-    const { message } = this.state;
-    if (message) {
-      return <div id="returnMsg">{message}</div>;
+    const { user } = this.props;
+    const { errorMsg } = user;
+    if (errorMsg) {
+      return <div id="returnMsg">{errorMsg}</div>;
     }
   }
 
+  /**
+ * @description renders react JSX
+ * @returns {JSX} react router
+ */
   render() {
     const {
       firstname,
@@ -77,10 +68,9 @@ class Signup extends React.Component {
       username,
       password,
       confirmPassword,
-      fetching,
-      message,
-      loggedIn
     } = this.state;
+    const { user } = this.props;
+    const { loggedIn, errorMsg } = user;
     return (
       !loggedIn ? (
         <div className="right-content" id="register">
@@ -95,8 +85,8 @@ class Signup extends React.Component {
             <Input type="text" placeholder="USERNAME" id="username" onChange={this.handleChange('username')} value={username} />
             <Input type="password" placeholder="PASSWORD" id="password" onChange={this.handleChange('password')} value={password} />
             <Input type="password" placeholder="CONFIRM PASSWORD" id="confirmPassword" onChange={this.handleChange('confirmPassword')} value={confirmPassword} />
-            {message && this.renderContent()}
-            <button type="submit" className="sign-proceed" disabled={fetching}>{!fetching ? 'PROCEED' : 'LOADING...'}</button>
+            {errorMsg && this.renderContent()}
+            <button type="submit" className="sign-proceed">PROCEED</button>
           </form>
         </div>
       ) : (
@@ -106,4 +96,29 @@ class Signup extends React.Component {
   }
 }
 
-export default Signup;
+Signup.propTypes = {
+  user: shape({
+    token: string,
+    user: object,
+  }).isRequired,
+  userSignup: func.isRequired
+};
+
+Signup.defaultProptype = {
+  user: shape({
+    token: '',
+    user: undefined
+  })
+};
+
+const mapStateToProps = state => ({ user: state.users });
+
+export const mapDispatchToProps = dispatch => ({
+  userSignup: (
+    firstname, lastname, othernames, email, phoneNumber, username, password, confirmPassword
+  ) => dispatch(userSignupAction(
+    firstname, lastname, othernames, email, phoneNumber, username, password, confirmPassword
+  ))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

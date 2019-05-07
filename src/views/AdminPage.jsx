@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
 import ireporterApi from '../api/ireporterApi';
 import Nav from '../components/Nav';
 import AdminSideNav from '../components/AdminSideNav';

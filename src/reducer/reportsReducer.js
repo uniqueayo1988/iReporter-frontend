@@ -1,11 +1,9 @@
-import { combineReducers } from 'redux';
-
 /**
  * @param {object} state - The initial state
  * @param {object} {*} - destructured type object
  * @returns {object} - The transformed state
  */
-const reportsReducer = (state = [], { type, payload }) => {
+const reportsReducer = (state = { report: [] }, { type, payload }) => {
   switch (type) {
     case 'FETCH_INTERVENTION_REPORTS':
       return {
@@ -32,6 +30,4 @@ const reportsReducer = (state = [], { type, payload }) => {
   }
 };
 
-export default combineReducers({
-  reports: reportsReducer
-});
+export default reportsReducer;

@@ -1,18 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {
+  shape, string, object, func
+} from 'prop-types';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import Input from './Input';
-import ireporterApi from '../api/ireporterApi';
+import { userLoginAction } from '../actions/userActions';
 
 class Login extends React.Component {
   state = {
     email: '',
-    password: '',
-    fetching: false,
-    loggedIn: false,
-    isAdmin: false,
-    isUser: false,
-    message: ''
+    password: ''
   }
 
   handleChange = str => (e) => {
@@ -21,48 +19,32 @@ class Login extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ fetching: true, message: '' });
     const {
       email,
       password,
     } = this.state;
-
-    try {
-      const response = await ireporterApi.post('/auth/login', {
-        email, password,
-      });
-      const { token, user } = response.data.data[0];
-      const { firstName, lastName } = user;
-      const userInfo = {
-        token, firstName, lastName
-      };
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
-
-      if (firstName === 'admin') {
-        this.setState({ isAdmin: true });
-      } else {
-        this.setState({ loggedIn: true });
-      }
-      this.setState({ fetching: false, isUser: true });
-    } catch (error) {
-      this.setState({ fetching: false, message: error.response.data.message });
-    }
+    const { userLogin } = this.props;
+    userLogin(email, password);
   }
 
   redirectLogin() {
-    const { isAdmin, loggedIn } = this.state;
-    if (isAdmin) {
+    const { user } = this.props;
+    const { payload, loggedIn } = user;
+    const { user: userInfo } = payload;
+    const { firstName } = userInfo;
+    if (firstName === 'admin' && loggedIn) {
       return <Redirect to="/admin" />;
     }
-    if (loggedIn) {
+    if (firstName !== 'admin' && loggedIn) {
       return <Redirect to="/profile" />;
     }
   }
 
   renderContent() {
-    const { message } = this.state;
-    if (message) {
-      return <div id="returnMsg">{message}</div>;
+    const { user } = this.props;
+    const { errorMsg } = user;
+    if (errorMsg) {
+      return <div id="returnMsg">{errorMsg}</div>;
     }
   }
 
@@ -70,11 +52,9 @@ class Login extends React.Component {
     const {
       email,
       password,
-      fetching,
-      message,
-      isUser,
     } = this.state;
-    const { handleOnClick } = this.props;
+    const { handleOnClick, user } = this.props;
+    const { isUser, errorMsg } = user;
     return (
       !isUser ? (
         <div className="right-content">
@@ -83,10 +63,9 @@ class Login extends React.Component {
             <label htmlFor="email" className="form-info">*Your information will be treated with utmost confidentiality!</label>
             <Input type="email" placeholder="EMAIL" id="email" onChange={this.handleChange('email')} value={email} />
             <Input type="password" placeholder="PASSWORD" id="password" onChange={this.handleChange('password')} value={password} />
-            {message && this.renderContent()}
-            <button type="submit" className="sign-proceed" disabled={fetching}>{!fetching ? 'LOGIN' : 'LOADING...'}</button>
+            {errorMsg && this.renderContent()}
+            <button type="submit" className="sign-proceed">LOGIN</button>
           </form>
-
           <div className="register-link">
             <span className="form-info">Not registered?</span>
             <br />
@@ -99,7 +78,25 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  handleOnClick: PropTypes.func.isRequired
+  handleOnClick: func.isRequired,
+  user: shape({
+    token: string,
+    user: object,
+  }).isRequired,
+  userLogin: func.isRequired
 };
 
-export default Login;
+Login.defaultProptype = {
+  user: shape({
+    token: '',
+    user: undefined
+  })
+};
+
+const mapStateToProps = state => ({ user: state.users });
+
+export const mapDispatchToProps = dispatch => ({
+  userLogin: (email, password) => dispatch(userLoginAction(email, password))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

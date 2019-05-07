@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import { userLogoutAction } from '../actions/userActions';
 
 class Nav extends React.Component {
   state = {
@@ -18,7 +20,8 @@ class Nav extends React.Component {
   }
 
   handleLogout = () => {
-    localStorage.clear();
+    const { userLogout } = this.props;
+    userLogout();
     this.setState({
       logout: false
     });
@@ -95,6 +98,13 @@ Nav.propTypes = {
   handleOnClick: PropTypes.func.isRequired,
   toggleLogin: PropTypes.bool.isRequired,
   showSignout: PropTypes.bool.isRequired,
+  userLogout: PropTypes.func.isRequired
 };
 
-export default Nav;
+const mapStateToProps = state => ({ user: state.users });
+
+export const mapDispatchToProps = dispatch => ({
+  userLogout: () => dispatch(userLogoutAction())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);

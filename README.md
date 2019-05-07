@@ -1,13 +1,13 @@
-# iReporter Frontend App - https://ireporter-client.herokuapp.com/
 [![Build Status](https://travis-ci.org/uniqueayo1988/iReporter-frontend.svg?branch=develop)](https://travis-ci.org/uniqueayo1988/iReporter-frontend) [![Coverage Status](https://coveralls.io/repos/github/uniqueayo1988/iReporter-frontend/badge.svg?branch=develop)](https://coveralls.io/github/uniqueayo1988/iReporter-frontend?branch=develop)
 
-# iReporter App - https://andela-ireporter.herokuapp.com/
+# iReporter Frontend App
 
 ## Project Overview
 The **iReporter** app is developed to curb the menace of corruption in Africa. The app enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that need government intervention.
 
 ### Application Link
-https://andela-ireporter.herokuapp.com/
+Front-end: https://ireporter-client.herokuapp.com/
+Back-end: https://andela-ireporter.herokuapp.com/
 
 ### UI Template Link
 html/css/js link: https://uniqueayo1988.github.io/iReporter/UI

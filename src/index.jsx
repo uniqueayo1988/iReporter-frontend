@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import AdminPage from './views/AdminPage';
@@ -9,6 +12,7 @@ import EditPage from './views/EditPage';
 import UserRecordPage from './views/UserRecordPage';
 import AdminRecordPage from './views/AdminRecordPage';
 import DraftPage from './views/DraftPage';
+import reducers from './reducer';
 
 // Import styles
 import './assets/scss/App.scss';
@@ -34,4 +38,11 @@ const App = () => (
   </BrowserRouter>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = createStore(reducers, applyMiddleware(thunk));
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
