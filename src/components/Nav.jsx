@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import { userLogoutAction } from '../actions/userActions';
 
-class Nav extends React.Component {
+export class Nav extends React.Component {
   state = {
     logout: true,
     navWidth: 0
@@ -62,8 +62,8 @@ class Nav extends React.Component {
                   )}
                   <li>
                     {showSignout
-                      ? <button type="button" className="menu-btn" onClick={handleOnClick}>{!toggleLogin ? 'Signup' : 'Login'}</button>
-                      : <button type="button" className="menu-btn" onClick={this.handleLogout}>Logout</button>
+                      ? <button type="button" id="login" className="menu-btn" onClick={handleOnClick}>{!toggleLogin ? 'Signup' : 'Login'}</button>
+                      : <button type="button" id="logout" className="menu-btn" onClick={this.handleLogout}>Logout</button>
                     }
                   </li>
                 </ul>
@@ -101,7 +101,7 @@ Nav.propTypes = {
   userLogout: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({ user: state.users });
+export const mapStateToProps = state => ({ user: state.users });
 
 export const mapDispatchToProps = dispatch => ({
   userLogout: () => dispatch(userLogoutAction())

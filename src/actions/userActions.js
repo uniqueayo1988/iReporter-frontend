@@ -7,7 +7,7 @@ import ireporterApi from '../api/ireporterApi';
  */
 const localStore = (token, firstname, lastname) => {
   const userInfo = { token, firstname, lastname };
-  localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  return localStorage.setItem('userInfo', JSON.stringify(userInfo));
 };
 
 /**

@@ -7,7 +7,7 @@ import { Redirect } from 'react-router';
 import Input from './Input';
 import { userLoginAction } from '../actions/userActions';
 
-class Login extends React.Component {
+export class Login extends React.Component {
   state = {
     email: '',
     password: ''
@@ -93,7 +93,7 @@ Login.defaultProptype = {
   })
 };
 
-const mapStateToProps = state => ({ user: state.users });
+export const mapStateToProps = state => ({ user: state.users });
 
 export const mapDispatchToProps = dispatch => ({
   userLogin: (email, password) => dispatch(userLoginAction(email, password))

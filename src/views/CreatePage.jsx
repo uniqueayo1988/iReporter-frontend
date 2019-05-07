@@ -1,10 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { get } from 'axios';
+import { connect } from 'react-redux';
+import { func, object as objectProp } from 'prop-types';
 import Nav from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
-import ireporterApi from '../api/ireporterApi';
+import { createRecordAction, getTokenAction } from '../actions/reportActions';
 
 class CreatePage extends React.Component {
   state = {
@@ -14,10 +16,8 @@ class CreatePage extends React.Component {
     location: '',
     type: 'redFlag',
     image: '',
-    errorMsg: '',
+    geoMsg: '',
     disabled: true,
-    subDisabled: false,
-    fetching: false
   }
 
   handleChange = str => (e) => {
@@ -42,14 +42,13 @@ class CreatePage extends React.Component {
           });
           this.setState({ disabled: true, location: response.data.plus_code.compound_code });
         } catch (error) {
-          this.setState({ errorMsg: error.response });
+          this.setState({ geoMsg: error.response });
         }
       }
     );
   }
 
   handleSubmit = async (e) => {
-    this.setState({ subDisabled: true, fetching: true });
     e.preventDefault();
     const {
       title, comment, location, type, image
@@ -61,37 +60,20 @@ class CreatePage extends React.Component {
     formData.append('type', type);
     formData.append('image', image);
 
-    try {
-      let url;
-      if (type === 'redFlag') {
-        url = 'red-flags';
-      }
-      if (type === 'intervention') {
-        url = 'interventions';
-      }
-      const objUser = JSON.parse(localStorage.userInfo);
-      const { token } = objUser;
-      const response = await ireporterApi.post(`/${url}`,
-        formData,
-        {
-          headers: {
-            'x-access-token': token,
-          },
-        });
-      this.setState({
-        subDisabled: false,
-        fetching: false,
-        disabled: false,
-        successMsg: response.data.data[0].message
-      });
-    } catch (error) {
-      this.setState({
-        subDisabled: false,
-        fetching: false,
-        disabled: false,
-        errorMsg: error.response.data.message
-      });
+    let url;
+    if (type === 'redFlag') {
+      url = 'red-flags';
     }
+    if (type === 'intervention') {
+      url = 'interventions';
+    }
+
+    const { getToken } = this.props;
+    getToken();
+
+    const { token } = getToken().payload;
+    const { createRecord } = this.props;
+    createRecord(url, token, formData);
   }
 
   handleFile = (e) => {
@@ -100,7 +82,8 @@ class CreatePage extends React.Component {
   }
 
   renderContent() {
-    const { successMsg, errorMsg } = this.state;
+    const { reports } = this.props;
+    const { successMsg, errorMsg } = reports;
     if (successMsg) {
       return <div id="successMsg">{successMsg}</div>;
     }
@@ -117,8 +100,7 @@ class CreatePage extends React.Component {
       location,
       type,
       disabled,
-      subDisabled,
-      fetching
+      geoMsg
     } = this.state;
 
     const isLoggedIn = localStorage.userInfo;
@@ -156,9 +138,10 @@ class CreatePage extends React.Component {
                 <br />
                 <input type="file" name="image" id="image" onChange={this.handleFile} required />
                 <div className="userMsg-wrapper">
+                  {geoMsg}
                   {this.renderContent()}
                 </div>
-                <input type="submit" value={!fetching ? 'SUBMIT' : 'LOADING...'} id="recordBtn" disabled={subDisabled} />
+                <input type="submit" value="SUBMIT" id="recordBtn" />
               </form>
             </section>
           </div>
@@ -170,4 +153,19 @@ class CreatePage extends React.Component {
   }
 }
 
-export default CreatePage;
+CreatePage.propTypes = {
+  createRecord: func.isRequired,
+  reports: objectProp.isRequired,
+  getToken: func.isRequired,
+};
+
+const mapStateToProps = state => ({ reports: state.reports });
+
+export const mapDispatchToProps = dispatch => ({
+  createRecord: (url, token, formData) => dispatch(
+    createRecordAction(url, token, formData),
+  ),
+  getToken: () => dispatch(getTokenAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePage);

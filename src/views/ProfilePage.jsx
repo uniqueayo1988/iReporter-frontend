@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import { func, object as objectProp } from 'prop-types';
 import Nav from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 import ReportStatus from '../components/ReportStatus';
-import ireporterApi from '../api/ireporterApi';
+import { fetchInterventionAction, getTokenAction, fetchRedflagAction } from '../actions/reportActions';
 
 /**
  * @description User profile page
  */
 class ProfilePage extends React.Component {
   state = {
-    interventions: [],
-    redflags: [],
     toggle: false,
     toggleRedflag: true,
     errMessage: '',
@@ -21,38 +21,13 @@ class ProfilePage extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchIntervention();
-    this.fetchRedflag();
-  }
+    const { getToken } = this.props;
+    getToken();
 
-  fetchIntervention = async () => {
-    try {
-      const objUser = JSON.parse(localStorage.userInfo);
-      const { token } = objUser;
-      const response = await ireporterApi.get('interventions', {
-        headers: {
-          'x-access-token': token,
-        }
-      });
-      this.setState({ interventions: response.data.data });
-    } catch (error) {
-      this.setState({ errMessage: 'Network error encountered' });
-    }
-  }
-
-  fetchRedflag = async () => {
-    try {
-      const objUser = JSON.parse(localStorage.userInfo);
-      const { token } = objUser;
-      const response = await ireporterApi.get('red-flags', {
-        headers: {
-          'x-access-token': token,
-        }
-      });
-      this.setState({ redflags: response.data.data });
-    } catch (error) {
-      this.setState({ errMessage: 'Network error encountered' });
-    }
+    const { token } = getToken().payload;
+    const { fetchIntervention, fetchRedflag } = this.props;
+    fetchIntervention(token);
+    fetchRedflag(token);
   }
 
   showIntervention = () => {
@@ -75,10 +50,11 @@ class ProfilePage extends React.Component {
   * @returns {HTMLDivElement} profile
   */
   render() {
+    const { reports } = this.props;
+    const { interventions, redflags } = reports;
     const {
-      interventions, redflags, toggle, toggleRedflag, errMessage, showSignout
+      toggle, toggleRedflag, errMessage, showSignout
     } = this.state;
-
     const isLoggedIn = localStorage.userInfo;
     return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
@@ -184,4 +160,19 @@ class ProfilePage extends React.Component {
   }
 }
 
-export default ProfilePage;
+ProfilePage.propTypes = {
+  fetchIntervention: func.isRequired,
+  fetchRedflag: func.isRequired,
+  reports: objectProp.isRequired,
+  getToken: func.isRequired,
+};
+
+const mapStateToProps = state => ({ reports: state.reports });
+
+export const mapDispatchToProps = dispatch => ({
+  fetchIntervention: token => dispatch(fetchInterventionAction(token)),
+  fetchRedflag: token => dispatch(fetchRedflagAction(token)),
+  getToken: () => dispatch(getTokenAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);

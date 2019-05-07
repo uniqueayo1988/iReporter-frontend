@@ -12,7 +12,7 @@ import { userSignupAction } from '../actions/userActions';
  * @param {e} for events actions
  * @returns {undefined}
  */
-class Signup extends React.Component {
+export class Signup extends React.Component {
   state = {
     firstname: '',
     lastname: '',
@@ -111,7 +111,7 @@ Signup.defaultProptype = {
   })
 };
 
-const mapStateToProps = state => ({ user: state.users });
+export const mapStateToProps = state => ({ user: state.users });
 
 export const mapDispatchToProps = dispatch => ({
   userSignup: (

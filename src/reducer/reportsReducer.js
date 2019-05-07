@@ -3,12 +3,25 @@
  * @param {object} {*} - destructured type object
  * @returns {object} - The transformed state
  */
-const reportsReducer = (state = { report: [] }, { type, payload }) => {
+const initialState = {
+  interventions: [],
+  redflags: [],
+  user: '',
+  errorMsg: '',
+  successMsg: ''
+};
+
+const reportsReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case 'GET_TOKEN':
+      return {
+        ...state,
+        user: payload
+      };
     case 'FETCH_INTERVENTION_REPORTS':
       return {
         ...state,
-        report: payload
+        interventions: payload
       };
     case 'FETCH_INTERVENTION_REPORTS_ERROR':
       return {
@@ -18,12 +31,22 @@ const reportsReducer = (state = { report: [] }, { type, payload }) => {
     case 'FETCH_REDFLAG_REPORTS':
       return {
         ...state,
-        report: payload
+        redflags: payload
       };
     case 'FETCH_REDFLAG_REPORTS_ERROR':
       return {
         ...state,
         report_error: payload
+      };
+    case 'CREATE_REPORTS':
+      return {
+        ...state,
+        successMsg: payload
+      };
+    case 'CREATE_REPORTS_ERROR':
+      return {
+        ...state,
+        errorMsg: payload
       };
     default:
       return state;

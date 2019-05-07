@@ -1,13 +1,26 @@
 import ireporterApi from '../api/ireporterApi';
 
+/**
+ * @description function for fetching token from localstorage
+ * @param {function} dispatch Function to dispatch actions to redux store.
+ * @returns {object} action
+ */
+const getTokenAction = () => {
+  const objUser = JSON.parse(localStorage.userInfo);
+  const { token, firstname, lastname } = objUser;
+  return {
+    type: 'GET_TOKEN', payload: { token, firstname, lastname }
+  };
+};
+
 const fetchInterventionAction = token => async (dispatch) => {
   try {
-    const response = await ireporterApi.get('/interventions/users', {
+    const response = await ireporterApi.get('/interventions', {
       headers: {
         'x-access-token': token
       }
     });
-    dispatch({ type: 'FETCH_INTERVENTION_REPORTS', payload: response.data });
+    dispatch({ type: 'FETCH_INTERVENTION_REPORTS', payload: response.data.data });
   } catch (error) {
     dispatch({ type: 'FETCH_INTERVENTION_REPORTS_ERROR', payload: error.response.data });
   }
@@ -15,15 +28,36 @@ const fetchInterventionAction = token => async (dispatch) => {
 
 const fetchRedflagAction = token => async (dispatch) => {
   try {
-    const response = await ireporterApi.get('/interventions/users', {
+    const response = await ireporterApi.get('/red-flags', {
       headers: {
         'x-access-token': token
       }
     });
-    dispatch({ type: 'FETCH_REDFLAG_REPORTS', payload: response.data });
+    dispatch({ type: 'FETCH_REDFLAG_REPORTS', payload: response.data.data });
   } catch (error) {
     dispatch({ type: 'FETCH_REDFLAG_REPORTS_ERROR', payload: error.response.data });
   }
 };
 
-export { fetchInterventionAction, fetchRedflagAction };
+const createRecordAction = (url, token, formData) => async (dispatch) => {
+  try {
+    const response = await ireporterApi.post(`/${url}`,
+      formData,
+      {
+        headers: {
+          'x-access-token': token
+        }
+      });
+    dispatch({ type: 'CREATE_REPORTS', payload: response.data.data[0].message });
+  } catch (error) {
+    dispatch({ type: 'CREATE_REPORTS_ERROR', payload: error.response.data.message });
+  }
+};
+
+
+export {
+  getTokenAction,
+  fetchInterventionAction,
+  fetchRedflagAction,
+  createRecordAction,
+};
