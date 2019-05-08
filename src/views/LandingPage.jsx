@@ -1,11 +1,11 @@
 import React from 'react';
 import image from '../assets/img/fraud.jpg';
-import Nav from '../components/Nav';
-import Signup from '../components/Signup';
-import Login from '../components/Login';
+import { Nav } from '../components/Nav';
+import SignupView from '../components/Signup';
+import LoginView from '../components/Login';
 import Footer from '../components/Footer';
 
-class LandingPage extends React.Component {
+export class LandingPage extends React.Component {
   state = {
     toggleSignUp: true,
     showSignout: true
@@ -31,7 +31,7 @@ class LandingPage extends React.Component {
               <h1>Report corruption and issues that need government intervention.</h1>
               <p className="content-para">Let us curb corruption to aid economic development.</p>
             </div>
-            {toggleSignUp ? <Signup /> : <Login handleOnClick={this.handleOnClick} />}
+            {toggleSignUp ? <SignupView /> : <LoginView handleOnClick={this.handleOnClick} />}
             <div className="clear" />
           </div>
         </header>

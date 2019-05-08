@@ -95,10 +95,16 @@ export class Nav extends React.Component {
 }
 
 Nav.propTypes = {
-  handleOnClick: PropTypes.func.isRequired,
-  toggleLogin: PropTypes.bool.isRequired,
+  handleOnClick: PropTypes.func,
+  toggleLogin: PropTypes.bool,
   showSignout: PropTypes.bool.isRequired,
-  userLogout: PropTypes.func.isRequired
+  userLogout: PropTypes.func
+};
+
+Nav.defaultProps = {
+  userLogout: undefined,
+  handleOnClick: undefined,
+  toggleLogin: undefined
 };
 
 export const mapStateToProps = state => ({ user: state.users });

@@ -1,6 +1,6 @@
 import React from 'react';
 import RecordView from '../components/RecordView';
-import Nav from '../components/Nav';
+import { Nav } from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 

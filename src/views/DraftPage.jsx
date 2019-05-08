@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
-import Nav from '../components/Nav';
+import { connect } from 'react-redux';
+import { func, object as objectProp } from 'prop-types';
+import NavView from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 import ireporterApi from '../api/ireporterApi';
+import { deleteRecordAction, getTokenAction } from '../actions/reportActions';
 
 /**
  * @description User draft page
  */
-class ProfilePage extends React.Component {
+class DraftPage extends React.Component {
   state = {
     interventions: [],
     redflags: [],
@@ -72,26 +75,23 @@ class ProfilePage extends React.Component {
   deleteRecord = async (e) => {
     const { id, className } = e.currentTarget;
     if (window.confirm('Click OK to delete this record')) { // eslint-disable-line no-alert
-      try {
-        const objUser = JSON.parse(localStorage.userInfo);
-        const { token } = objUser;
-        const response = await ireporterApi.delete(`${className}/${id}`, {
-          headers: {
-            'x-access-token': token,
-          }
-        });
-        this.setState({ successMsg: response.data.data[0].message });
-        this.componentDidMount();
-      } catch (error) {
-        this.setState({ errMessage: 'Network error encountered' });
-      }
+      const { getToken } = this.props;
+      getToken();
+      const { token } = getToken().payload;
+      const { deleteRecord } = this.props;
+      deleteRecord(token, className, id);
+      this.componentDidMount();
     }
   }
 
   renderContent() {
-    const { successMsg } = this.state;
+    const { reports } = this.props;
+    const { successMsg, errorMsg } = reports;
     if (successMsg) {
       return <div id="successMsg">{successMsg}</div>;
+    }
+    if (errorMsg) {
+      return <div id="returnMsg">{errorMsg}</div>;
     }
   }
 
@@ -109,7 +109,7 @@ class ProfilePage extends React.Component {
     return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
-          <Nav showSignout={showSignout} />
+          <NavView showSignout={showSignout} />
         </header>
         <main className="db-body">
           <SideNav />
@@ -142,92 +142,94 @@ class ProfilePage extends React.Component {
                 </div>
 
                 <table id="profileRedflag">
-                  <tr className="tr-header">
-                    <th>S/N</th>
-                    <th>Record</th>
-                    <th>Type</th>
-                    <th>Location</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </tr>
-                  { toggle
-                    && interventions.map((item, i) => {
-                      const date = new Date(item.createdon);
-                      const stringDate = date.toDateString();
-                      return (
-                        <tr key={item.id}>
-                          <td>{i + 1}</td>
-                          <td>
-                            <Link to={`/edit?id=${item.id}&type=interventions`}>
-                              <h3 className="tr-header">{item.title}</h3>
-                              <p>
-                                {item.comment}
-                                <br />
-                                <span className="tb-date">{stringDate}</span>
-                              </p>
-                            </Link>
-                          </td>
-                          <td>{item.type.toUpperCase()}</td>
-                          <td>
-                            {item.location}
-                            <br />
-                            <button type="button" className="locationBtn" name={item.id}>
-                              <span className="tb-date">Change</span>
-                            </button>
-                          </td>
-                          <td className="td-action">
-                            <Link to={`/edit?id=${item.id}&type=interventions`}>
-                              <i className="fa fa-edit tb-edit" />
-                            </Link>
-                          </td>
-                          <td className="td-action">
-                            <span className="interventions" id={item.id} onClick={this.deleteRecord} role="presentation">
-                              <i className="fa fa-trash tb-delete" />
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  }
-                  { toggleRedflag
-                    && redflags.map((item, i) => {
-                      const date = new Date(item.createdon);
-                      const stringDate = date.toDateString();
-                      return (
-                        <tr key={item.id}>
-                          <td>{i + 1}</td>
-                          <td>
-                            <Link to={`/edit?id=${item.id}&type=red-flags`}>
-                              <h3 className="tr-header">{item.title}</h3>
-                              <p>
-                                {item.comment}
-                                <br />
-                                <span className="tb-date">{stringDate}</span>
-                              </p>
-                            </Link>
-                          </td>
-                          <td>{item.type.toUpperCase()}</td>
-                          <td>
-                            {item.location}
-                            <br />
-                            <button type="button" className="locationBtn" name={item.id}>
-                              <span className="tb-date">Change</span>
-                            </button>
-                          </td>
-                          <td className="td-action">
-                            <Link to={`/edit?id=${item.id}&type=red-flags`}>
-                              <i className="fa fa-edit tb-edit" />
-                            </Link>
-                          </td>
-                          <td className="td-action">
-                            <span className="red-flags" id={item.id} onClick={this.deleteRecord} role="presentation">
-                              <i className="fa fa-trash tb-delete" />
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  }
+                  <tbody>
+                    <tr className="tr-header">
+                      <th>S/N</th>
+                      <th>Record</th>
+                      <th>Type</th>
+                      <th>Location</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                    { toggle
+                      && interventions.map((item, i) => {
+                        const date = new Date(item.createdon);
+                        const stringDate = date.toDateString();
+                        return (
+                          <tr key={item.id}>
+                            <td>{i + 1}</td>
+                            <td>
+                              <Link to={`/edit?id=${item.id}&type=interventions`}>
+                                <h3 className="tr-header">{item.title}</h3>
+                                <p>
+                                  {item.comment}
+                                  <br />
+                                  <span className="tb-date">{stringDate}</span>
+                                </p>
+                              </Link>
+                            </td>
+                            <td>{item.type.toUpperCase()}</td>
+                            <td>
+                              {item.location}
+                              <br />
+                              <button type="button" className="locationBtn" name={item.id}>
+                                <span className="tb-date">Change</span>
+                              </button>
+                            </td>
+                            <td className="td-action">
+                              <Link to={`/edit?id=${item.id}&type=interventions`}>
+                                <i className="fa fa-edit tb-edit" />
+                              </Link>
+                            </td>
+                            <td className="td-action">
+                              <span className="interventions" id={item.id} onClick={this.deleteRecord} role="presentation">
+                                <i className="fa fa-trash tb-delete" />
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    }
+                    { toggleRedflag
+                      && redflags.map((item, i) => {
+                        const date = new Date(item.createdon);
+                        const stringDate = date.toDateString();
+                        return (
+                          <tr key={item.id}>
+                            <td>{i + 1}</td>
+                            <td>
+                              <Link to={`/edit?id=${item.id}&type=red-flags`}>
+                                <h3 className="tr-header">{item.title}</h3>
+                                <p>
+                                  {item.comment}
+                                  <br />
+                                  <span className="tb-date">{stringDate}</span>
+                                </p>
+                              </Link>
+                            </td>
+                            <td>{item.type.toUpperCase()}</td>
+                            <td>
+                              {item.location}
+                              <br />
+                              <button type="button" className="locationBtn" name={item.id}>
+                                <span className="tb-date">Change</span>
+                              </button>
+                            </td>
+                            <td className="td-action">
+                              <Link to={`/edit?id=${item.id}&type=red-flags`}>
+                                <i className="fa fa-edit tb-edit" />
+                              </Link>
+                            </td>
+                            <td className="td-action">
+                              <span className="red-flags" id={item.id} onClick={this.deleteRecord} role="presentation">
+                                <i className="fa fa-trash tb-delete" />
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    }
+                  </tbody>
                 </table>
               </div>
             </section>
@@ -242,4 +244,20 @@ class ProfilePage extends React.Component {
   }
 }
 
-export default ProfilePage;
+DraftPage.propTypes = {
+  deleteRecord: func.isRequired,
+  reports: objectProp.isRequired,
+  getToken: func.isRequired,
+};
+
+const mapStateToProps = state => ({ reports: state.reports });
+
+export const mapDispatchToProps = dispatch => ({
+  deleteRecord: (token, id, className) => dispatch(
+    deleteRecordAction(token, id, className),
+  ),
+  getToken: () => dispatch(getTokenAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DraftPage);
+// export default DraftPage;

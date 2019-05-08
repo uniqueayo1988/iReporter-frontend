@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { get } from 'axios';
 import { connect } from 'react-redux';
 import { func, object as objectProp } from 'prop-types';
-import Nav from '../components/Nav';
+import NavView from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 import { createRecordAction, getTokenAction } from '../actions/reportActions';
@@ -107,7 +107,7 @@ class CreatePage extends React.Component {
     return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
-          <Nav showSignout={showSignout} />
+          <NavView showSignout={showSignout} />
         </header>
         <main className="db-body">
           <SideNav />

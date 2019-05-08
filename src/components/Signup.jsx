@@ -28,7 +28,7 @@ export class Signup extends React.Component {
     this.setState({ [str]: e.currentTarget.value });
   }
 
-  handleSubmit = async (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       firstname,
@@ -49,8 +49,8 @@ export class Signup extends React.Component {
   renderContent() {
     const { user } = this.props;
     const { errorMsg } = user;
-    if (errorMsg) {
-      return <div id="returnMsg">{errorMsg}</div>;
+    if (errorMsg || '') {
+      return <div id="returnMsg">{errorMsg || ''}</div>;
     }
   }
 
@@ -70,7 +70,7 @@ export class Signup extends React.Component {
       confirmPassword,
     } = this.state;
     const { user } = this.props;
-    const { loggedIn, errorMsg } = user;
+    const { errorMsg, loggedIn } = user;
     return (
       !loggedIn ? (
         <div className="right-content" id="register">
@@ -97,11 +97,11 @@ export class Signup extends React.Component {
 }
 
 Signup.propTypes = {
+  userSignup: func.isRequired,
   user: shape({
     token: string,
     user: object,
   }).isRequired,
-  userSignup: func.isRequired
 };
 
 Signup.defaultProptype = {

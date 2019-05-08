@@ -41,6 +41,11 @@ const usersReducer = (state = initialState, { type, payload }) => {
         ...state,
         errorMsg: payload
       };
+    case 'LOAD_STATE':
+      return {
+        ...state,
+        loadState: payload
+      };
     case 'LOGOUT_USER':
       return {
         ...state,

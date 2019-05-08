@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import LandingPage from './views/LandingPage';
+import { LandingPage } from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import AdminPage from './views/AdminPage';
 import CreatePage from './views/CreatePage';

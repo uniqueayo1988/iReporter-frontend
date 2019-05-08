@@ -10,7 +10,7 @@ import { userLoginAction } from '../actions/userActions';
 export class Login extends React.Component {
   state = {
     email: '',
-    password: ''
+    password: '',
   }
 
   handleChange = str => (e) => {

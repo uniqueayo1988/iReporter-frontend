@@ -54,10 +54,42 @@ const createRecordAction = (url, token, formData) => async (dispatch) => {
   }
 };
 
+const editRecordAction = (token, type, id, title, comment) => async (dispatch) => {
+  try {
+    const response = await ireporterApi.patch(`/${type}/${id}/comment`, {
+      title, comment,
+    },
+    {
+      headers: {
+        'x-access-token': token
+      }
+    });
+    dispatch({ type: 'EDIT_REPORT_COMMENT', payload: response.data.data[0].message });
+  } catch (error) {
+    dispatch({ type: 'EDIT_REPORT_COMMENT_ERROR', payload: error.response.data.message });
+  }
+};
+
+const deleteRecordAction = (token, className, id) => async (dispatch) => {
+  try {
+    const response = await ireporterApi.delete(`/${className}/${id}`,
+      {
+        headers: {
+          'x-access-token': token
+        }
+      });
+    dispatch({ type: 'DELETE_REPORT_COMMENT', payload: response.data.data[0].message });
+  } catch (error) {
+    dispatch({ type: 'DELETE_REPORT_COMMENT_ERROR', payload: 'Network error encountered' });
+  }
+};
+
 
 export {
   getTokenAction,
   fetchInterventionAction,
   fetchRedflagAction,
   createRecordAction,
+  editRecordAction,
+  deleteRecordAction
 };

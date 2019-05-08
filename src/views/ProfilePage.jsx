@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { func, object as objectProp } from 'prop-types';
-import Nav from '../components/Nav';
+import NavView from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 import ReportStatus from '../components/ReportStatus';
@@ -59,7 +59,7 @@ class ProfilePage extends React.Component {
     return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
-          <Nav showSignout={showSignout} />
+          <NavView showSignout={showSignout} />
         </header>
         <main className="db-body">
           <SideNav />
@@ -94,58 +94,60 @@ class ProfilePage extends React.Component {
                 </div>
 
                 <table id="profileRedflag">
-                  <tr className="tr-header">
-                    <th>Media</th>
-                    <th>Record</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                  </tr>
-                  { toggle
-                    && interventions.map((item) => {
-                      const date = new Date(item.createdon);
-                      const stringDate = date.toDateString();
-                      return (
-                        <tr key={item.id}>
-                          <td><img src={`https://andela-ireporter.herokuapp.com/${item.image}`} alt="Intervention" /></td>
-                          <td>
-                            <Link to={`/record?id=${item.id}&type=interventions`}>
-                              <h3 className="tr-header">{item.title}</h3>
-                              <p>
-                                {item.comment}
-                                <br />
-                                <span className="tb-date">{stringDate}</span>
-                              </p>
-                            </Link>
-                          </td>
-                          <td>{item.type.toUpperCase()}</td>
-                          <td>{item.status.toUpperCase()}</td>
-                        </tr>
-                      );
-                    })
-                  }
-                  { toggleRedflag
-                    && redflags.map((item) => {
-                      const date = new Date(item.createdon);
-                      const stringDate = date.toDateString();
-                      return (
-                        <tr key={item.id}>
-                          <td><img src={`https://andela-ireporter.herokuapp.com/${item.image}`} alt="Red Flag" /></td>
-                          <td>
-                            <Link to={`/record?id=${item.id}&type=red-flags`}>
-                              <h3 className="tr-header">{item.title}</h3>
-                              <p>
-                                {item.comment}
-                                <br />
-                                <span className="tb-date">{stringDate}</span>
-                              </p>
-                            </Link>
-                          </td>
-                          <td>{item.type.toUpperCase()}</td>
-                          <td>{item.status.toUpperCase()}</td>
-                        </tr>
-                      );
-                    })
-                  }
+                  <tbody>
+                    <tr className="tr-header">
+                      <th>Media</th>
+                      <th>Record</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                    </tr>
+                    { toggle
+                      && interventions.map((item) => {
+                        const date = new Date(item.createdon);
+                        const stringDate = date.toDateString();
+                        return (
+                          <tr key={item.id}>
+                            <td><img src={`https://andela-ireporter.herokuapp.com/${item.image}`} alt="Intervention" /></td>
+                            <td>
+                              <Link to={`/record?id=${item.id}&type=interventions`}>
+                                <h3 className="tr-header">{item.title}</h3>
+                                <p>
+                                  {item.comment}
+                                  <br />
+                                  <span className="tb-date">{stringDate}</span>
+                                </p>
+                              </Link>
+                            </td>
+                            <td>{item.type.toUpperCase()}</td>
+                            <td>{item.status.toUpperCase()}</td>
+                          </tr>
+                        );
+                      })
+                    }
+                    { toggleRedflag
+                      && redflags.map((item) => {
+                        const date = new Date(item.createdon);
+                        const stringDate = date.toDateString();
+                        return (
+                          <tr key={item.id}>
+                            <td><img src={`https://andela-ireporter.herokuapp.com/${item.image}`} alt="Red Flag" /></td>
+                            <td>
+                              <Link to={`/record?id=${item.id}&type=red-flags`}>
+                                <h3 className="tr-header">{item.title}</h3>
+                                <p>
+                                  {item.comment}
+                                  <br />
+                                  <span className="tb-date">{stringDate}</span>
+                                </p>
+                              </Link>
+                            </td>
+                            <td>{item.type.toUpperCase()}</td>
+                            <td>{item.status.toUpperCase()}</td>
+                          </tr>
+                        );
+                      })
+                    }
+                  </tbody>
                 </table>
               </div>
             </section>

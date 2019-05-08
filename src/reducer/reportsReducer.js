@@ -48,6 +48,26 @@ const reportsReducer = (state = initialState, { type, payload }) => {
         ...state,
         errorMsg: payload
       };
+    case 'EDIT_REPORT_COMMENT':
+      return {
+        ...state,
+        successMsg: payload
+      };
+    case 'EDIT_REPORT_COMMENT_ERROR':
+      return {
+        ...state,
+        errorMsg: payload
+      };
+    case 'DELETE_REPORT_COMMENT':
+      return {
+        ...state,
+        successMsg: payload
+      };
+    case 'DELETE_REPORT_COMMENT_ERROR':
+      return {
+        ...state,
+        errorMsg: payload
+      };
     default:
       return state;
   }

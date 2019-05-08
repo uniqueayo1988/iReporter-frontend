@@ -5,15 +5,15 @@ import { Redirect } from 'react-router';
 class SideNav extends React.Component {
   state = {
     logout: true,
-    firstName: '',
-    lastName: ''
+    firstname: '',
+    lastname: ''
   }
 
   componentDidMount() {
     const objUser = JSON.parse(localStorage.userInfo);
-    const { firstName, lastName } = objUser;
+    const { firstname, lastname } = objUser;
     this.setState({
-      firstName, lastName
+      firstname, lastname
     });
   }
 
@@ -26,7 +26,7 @@ class SideNav extends React.Component {
   }
 
   render() {
-    const { logout, firstName, lastName } = this.state;
+    const { logout, firstname, lastname } = this.state;
     return (
       logout ? (
         <div className="db-sidenav db-body">
@@ -34,7 +34,7 @@ class SideNav extends React.Component {
             <h2 className="user-name">
               <i className="fa fa-user-circle" />
               <br />
-              {`${firstName}, ${lastName}`}
+              {`${firstname}, ${lastname}`}
             </h2>
             <ul>
               <li className="nav-list">

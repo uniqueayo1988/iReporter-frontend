@@ -30,7 +30,7 @@ const userLoginAction = (email, password) => async (dispatch) => {
 };
 
 /**
-@description function for dispatching user login
+ * @description function for dispatching user login
  * @param {object} user signup details
  * @returns {undefined}
  */
@@ -66,6 +66,13 @@ const userLogoutAction = () => {
   };
 };
 
+/**
+ * @description function for dispatching action for logging out user
+ * @param {function} dispatch Function to dispatch actions to redux store.
+ * @returns {object} action
+ */
+const loadStateAction = () => ({ type: 'LOAD_STATE', payload: true });
+
 export {
-  userLoginAction, userSignupAction, userLogoutAction, localStore
+  userLoginAction, userSignupAction, userLogoutAction, localStore, loadStateAction
 };

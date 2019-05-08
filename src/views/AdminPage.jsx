@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import { Redirect } from 'react-router';
 import ireporterApi from '../api/ireporterApi';
-import Nav from '../components/Nav';
+import { Nav } from '../components/Nav';
 import AdminSideNav from '../components/AdminSideNav';
 import Footer from '../components/Footer';
 
@@ -156,7 +155,6 @@ class AdminPage extends React.Component {
                           <td>
                             <select className="status" id={item.id} onChange={this.deleteRecord} name="interventions">
                               <option>Update Status</option>
-                              <option>draft</option>
                               <option>resolved</option>
                               <option>under investigation</option>
                               <option>rejected</option>
@@ -190,7 +188,6 @@ class AdminPage extends React.Component {
                             <form>
                               <select className="status" id={item.id} onChange={this.deleteRecord} name="red-flags">
                                 <option>Update Status</option>
-                                <option>draft</option>
                                 <option>resolved</option>
                                 <option>under investigation</option>
                                 <option>rejected</option>

@@ -1,9 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import Nav from '../components/Nav';
+import { connect } from 'react-redux';
+import { func, object as objectProp } from 'prop-types';
+import NavView from '../components/Nav';
 import SideNav from '../components/SideNav';
 import Footer from '../components/Footer';
 import ireporterApi from '../api/ireporterApi';
+import { getTokenAction, editRecordAction } from '../actions/reportActions';
 
 /**
  * @description User edit page
@@ -14,8 +17,10 @@ class EditPage extends React.Component {
     title: '',
     comment: '',
     errorMsg: '',
-    disabled: true,
-    successMsg: ''
+  }
+
+  componentDidMount() {
+    this.fetchRecord();
   }
 
   fetchRecord = async () => {
@@ -34,7 +39,7 @@ class EditPage extends React.Component {
         title, comment
       } = response.data.data[0];
       this.setState({
-        title, comment, disabled: false
+        title, comment
       });
     } catch (error) {
       this.setState({ errorMsg: 'Network Error' });
@@ -47,35 +52,25 @@ class EditPage extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ disabled: true });
     const {
       title,
       comment,
     } = this.state;
 
-    try {
-      const params = new URLSearchParams(document.location.search.substring(1));
-      const id = params.get('id');
-      const type = params.get('type');
-      const objUser = JSON.parse(localStorage.userInfo);
-      const { token } = objUser;
-      const response = await ireporterApi.patch(`${type}/${id}/comment`, {
-        title, comment
-      },
-      {
-        headers: {
-          'x-access-token': token
-        },
-      });
+    const params = new URLSearchParams(document.location.search.substring(1));
+    const id = params.get('id');
+    const type = params.get('type');
+    const { getToken } = this.props;
+    getToken();
 
-      this.setState({ disabled: false, successMsg: response.data.data[0].message });
-    } catch (error) {
-      this.setState({ disabled: false, errorMsg: error.response.data.message });
-    }
+    const { token } = getToken().payload;
+    const { editRecord } = this.props;
+    editRecord(token, type, id, title, comment);
   }
 
   renderContent() {
-    const { successMsg, errorMsg } = this.state;
+    const { reports } = this.props;
+    const { successMsg, errorMsg } = reports;
     if (successMsg) {
       return <div id="successMsg">{successMsg}</div>;
     }
@@ -94,13 +89,14 @@ class EditPage extends React.Component {
       showSignout,
       title,
       comment,
-      disabled
+      disabled,
+      errorMsg
     } = this.state;
     const isLoggedIn = localStorage.userInfo;
     return !isLoggedIn ? <Redirect to="/" /> : (
       <div>
         <header>
-          <Nav showSignout={showSignout} />
+          <NavView showSignout={showSignout} />
         </header>
         <main className="db-body">
           <SideNav />
@@ -116,6 +112,7 @@ class EditPage extends React.Component {
                 <br />
                 <div className="userMsg-wrapper">
                   {this.renderContent()}
+                  {errorMsg}
                 </div>
                 <input type="submit" value="SUBMIT" id="recordBtn" onClick={this.handleSubmit} disabled={disabled} />
               </form>
@@ -129,4 +126,20 @@ class EditPage extends React.Component {
   }
 }
 
-export default EditPage;
+EditPage.propTypes = {
+  editRecord: func.isRequired,
+  reports: objectProp.isRequired,
+  getToken: func.isRequired,
+};
+
+const mapStateToProps = state => ({ reports: state.reports });
+
+export const mapDispatchToProps = dispatch => ({
+  editRecord: (token, type, id, title, comment) => dispatch(
+    editRecordAction(token, type, id, title, comment),
+  ),
+  getToken: () => dispatch(getTokenAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditPage);
+// export default EditPage;
